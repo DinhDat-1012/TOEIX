@@ -1,0 +1,256 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tiếng Anh</title>
+    <link rel="stylesheet" th:href="@{../css/landing_page.css}">
+    <script th:src="@{../js/landing_page_script.js}"></script>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
+</head>
+<body>
+    
+    <nav class="head_bar" id="head_bar">
+        <a href="/static">
+            <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px;color: aliceblue; margin-bottom: 10px;"></i>
+        </a>
+        <a class="Web_subTitle" > ToeiX - Học tiếng Anh ngay! </a>
+    <div class="serch_box">
+        <div class="serch_box_icon">
+            <input class="_input_15ttk_39" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+        </div>
+    </div>
+
+    <div class="navBar_portal">
+        <button class="login_button" onclick="openLoginform()">Đăng nhập</button>
+        <button class="register_button" onclick="openRegisterform()">Đăng ký </button>
+    </div>
+    </nav>
+
+    <!--Login form & register form-->
+
+    <div class="login_form_wrapper" style="display: none;">
+        <h2>Đăng nhập</h2>
+        <form action="#">
+          <div class="form-control">
+            <input type="text" required>
+            <label>Email hoặc số điện thoại di động</label>
+          </div>
+          <div class="form-control">
+            <input type="password" required>
+            <label>Mật khẩu</label>
+          </div>
+          <button class="signInButton" type="submit" onclick="signInButton_Click()">Đăng nhập</button>
+          <div class="form-help">
+            <div class="remember-me">
+              <input type="checkbox" id="remember-me">
+              <label for="remember-me">Ghi nhớ mật khẩu</label>
+            </div>
+            <a href="#">Trợ giúp?</a>
+          </div>
+        </form>
+        <p>Không có tài khoản? <a class="openRegisterForm" href="#" onclick="openRegisterFormToCreateAccount()">Tạo tài khoản ngay.</a></p>
+        <small>
+          This page is Copyrighted (©) 2025 designed by Dinh Duc Dat.
+          <a href="#">Learn more.</a>
+        </small>
+      </div>
+    <!--register form==============================================-->
+
+    <div class="register_form_wrapper" style="display:none;">
+        <h2>Đăng ký</h2>
+        <form action="#" id="registerForm">
+            <div class="register_form_control">
+                <input id="register_email" type="text" required>
+                <label>Địa chỉ email</label>
+            </div>
+            <div class="register_form_control">
+                <input id="register_user_name" type="text" required>
+                <label>Tên đăng nhập</label>
+            </div>
+            <div class="register_form_control">
+                <input id="register_password" type="password" required>
+                <label>Mật khẩu</label>
+            </div>
+            <div class="register_form_control">
+                <input id="register_password_repeat" type="password" required>
+                <label>Nhập lại mật khẩu</label>
+            </div>
+            <button type="submit" class="Register-button" onclick="signUpButtonClick()">Đăng ký ngay.</button>
+        </form>
+
+        <p>Đã có tài khoản? <a class="openLoginForm" href="#" onclick="openLoginformToSignIn()">Đăng nhập ngay.</a></p>
+        <small>
+            This page is Copyrighted (©) 2025 designed by Dinh Duc Dat.
+            <a href="#">Learn more.</a>
+        </small>
+    </div>
+    <!--banner quảng bá cho trang-->
+    <section class="slideshow-container">
+      <img class="slides" id="slide_show_1" th:src="@{/banner/slide_1.png}" alt="Banner 1" style="display: block;">
+      <img class="slides" id="slide_show_2" th:src="@{/banner/slide_2.png}" alt="Banner 2" style="display: none;">
+      <img class="slides" id="slide_show_3" th:src="@{/banner/slide_3.png}" alt="Banner 3" style="display: none;">
+    </section>
+    <!--Hiển thị các khóa học===================================================================================================================-->
+    <!--Hiển thị khóa học mới-->
+    <section class="new_course_heading">
+      <span >
+          Khóa học mới
+          <span class="new_course_label">New</span>
+      </span>
+    </section>
+
+    <section class="new_course_container">
+      <div class="course-card">
+          <img th:src="@{Course_img/pre_ielts_course.png}" alt="Khóa học mới 1">
+          <div class="course-content">
+              <div class="course-title">Pre IELTS</div>
+              <div class="course-price">1.299.000đ</div>
+          </div>
+      </div>
+      <div class="course-card">
+          <img th:src="@{Course_img/toeic_course.png}" alt="Khóa học mơi">
+          <div class="course-content">
+              <div class="course-title">TOEIC 450+</div>
+              <div class="course-price">1.399.000đ</div>
+          </div>
+      </div>
+      <div class="course-card">
+          <img th:src="@{Course_img/ielts_course.png}" alt="khóa học mới">
+          <div class="course-content">
+              <div class="course-title">INCOMPETENT IELTS</div>
+              <div class="course-price">299.000đ</div>
+          </div>
+      </div>
+      <div class="course-card">
+        <img th:src="@{/Course_img/toeic_course.png}" alt="khóa học mới">
+        <div class="course-content">
+            <div class="course-title">TOEIC 500+</div>
+            <div class="course-price">1.399.000đ</div>
+        </div>
+    </div>
+  </section>
+<!--Khóa học miễn phí=====================================================-->
+
+  <div class="free_course_heading">
+    <span >
+        Khóa học Miễn Phí
+        <span class="free_course_label">Free</span>
+    </span>
+    <span class="all_free_course_view"><a href="#">Xem tất cả</a>
+    </span>
+  </div>
+
+  <section class="free_course_container">
+    <div class="course-card">
+        <img th:src="@{/Course_img/pre_ielts_course.png}" alt="Khóa học naang cao">
+        <div class="course-content">
+            <div class="course-title">Pre IELTS</div>
+            <div class="course-price">Miễn phí</div>
+        </div>
+    </div>
+    <div class="course-card">
+        <img th:src="@{/Course_img/toeic_course.png}" alt="Khóa học nâng cao">
+        <div class="course-content">
+            <div class="course-title">TOEIC 450+</div>
+            <div class="course-price">Miễn phí</div>
+        </div>
+    </div>
+    <div class="course-card">
+        <img th:src="@{/Course_img/ielts_course.png}" alt="Khóa học nâng cao">
+        <div class="course-content">
+            <div class="course-title">INCOMPETENT IELTS</div>
+            <div class="course-price">Miễn phí</div>
+        </div>
+    </div>
+    <div class="course-card">
+      <img th:src="@{Course_img/toeic_course.png}" alt="Khóa học nâng cao">
+      <div class="course-content">
+          <div class="course-title">TOEIC 500+</div>
+          <div class="course-price">Miễn phí</div>
+      </div>
+  </div>
+</section>
+<!--Khóa học Pro====================================================-->
+
+  <div class="pro_course_heading">
+    <span >
+        Khóa học Pro
+        <span class="pro_course_label">Pro</span>
+    </span>
+  </span>
+  <span class="all_pro_course_view"><a href="#">Xem tất cả</a>
+  </span>
+
+  </div>
+  <section class="pro_course_container">
+    <div class="course-card">
+        <img th:src="@{Course_img/pre_ielts_course.png}" alt="Khóa học pro">
+        <div class="course-content">
+            <div class="course-title">Pre IELTS</div>
+            <div class="course-price">1.299.000đ</div>
+        </div>
+    </div>
+    <div class="course-card">
+        <img th:src="@{Course_img/toeic_course.png}" alt="Khóa học Pro">
+        <div class="course-content">
+            <div class="course-title">TOEIC 450+</div>
+            <div class="course-price">1.399.000đ</div>
+        </div>
+    </div>
+    <div class="course-card">
+        <img th:src="@{Course_img/ielts_course.png}" alt="Khóa học pro">
+        <div class="course-content">
+            <div class="course-title">INCOMPETENT IELTS</div>
+            <div class="course-price">299.000đ</div>
+        </div>
+    </div>
+    <div class="course-card">
+      <img th:src="@{Course_img/toeic_course.png}" alt="Khóa học pro">
+      <div class="course-content">
+          <div class="course-title">TOEIC 500+</div>
+          <div class="course-price">1.399.000đ</div>
+      </div>
+  </div>
+</section>
+  
+  <!--Footer =================================================================================================================================-->
+  <footer class="footer_wrapper">
+  <div class="footer-column">
+    <h3>Học Tiếng Anh Để Đi Làm</h3>
+    <p>Điện thoại: 0398756015</p>
+    <p>Email: Dinhdat1012vn@gmail.com</p>
+    <p>Địa chỉ: Số 16, ngõ 257, Thanh Nhàn, Hai Bà Trưng, Hà Nội</p>
+</div>
+<div class="footer-column">
+    <h3>Về Chúng Tôi</h3>
+    <a href="#">Giới thiệu</a>
+    <a href="#">Liên hệ</a>
+    <a href="#">Điều khoản</a>
+    <a href="#">Bảo mật</a>
+</div>
+<div class="footer-column">
+    <h3>Sản phẩm</h3>
+    <a href="#">Sản Phẩm 1</a>
+    <a href="#">Sản Phẩm 2</a>
+    <a href="#">Sản phẩm 3</a>
+</div>
+<div class="footer-column">
+    <h3>Công cụ</h3>
+    <a href="#">sản phẩm 3</a>
+    <a href="#">Sản phẩm 2</a>
+</div>
+<div class="footer-column">
+    <h3>Theo dõi chúng tôi.</h3>
+    <div class="footer-social">
+        <img src="icon\ytb_icon.png" alt="YouTube">
+        <img src="icon\fb_icon.png" alt="Facebook">
+        <img src="icon\instagram.png" alt="instagram">
+    </div>
+</div>
+</footer>
+<div class="footer-bottom">©2024 - 2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
+</footer>
+</body>
+</html>

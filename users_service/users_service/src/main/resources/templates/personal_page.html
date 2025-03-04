@@ -1,0 +1,181 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang cá nhân</title>
+    <link rel="stylesheet" th:href="@{/css/personal_page.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
+</head>
+<body>
+    
+    <nav class="head_bar" id="head_bar">
+        <a href="/static">
+            <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px; color: rgb(250, 250, 254); position: relative;margin-bottom: 20%;"></i>
+        </a>
+        <a class="Web_subTitle" >ToeiX - Học tiếng Anh ngay! </a>
+        <div class="serch_box">
+            <div class="serch_box_icon">
+                <input class="_input_15ttk_39" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+            </div>
+        </div>
+
+    <div class="user_courses">
+        <div class="user_courses_title">
+            <p>Khóa khọc của tôi</p>
+        </div>
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </div>
+
+
+    <div class="noti_box" onclick="toggleNotifications()">
+        <i class="fa-solid fa-bell"></i>
+    </div>
+
+    <div id="notification-list" class="notification-list">
+            <p class="title">Thông báo</p>
+            <ul>
+                <li>📢 Hôm nay có khuyến mãi 50%!</li>
+                <li>🆕 Bài viết mới về lập trình web.</li>
+                <li>⚠️ Bạn có tin nhắn chưa đọc.</li>
+            </ul>
+    </div>
+
+    <div class="navBar_">
+        <nav class="user_i4_box">
+            <div class="user_ico" onclick="toggleMenu()">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="user_avatar" >
+            </div>
+        <div class="user_status"></div>
+        </nav>
+
+    <div class="profile-container">
+
+        <!-- Hộp thoại thông tin -->
+        <div class="profile-menu" id="profileMenu">
+            <div class="profile-header">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar" class="profile-pic">
+                <div class="profile-info">
+                    <p class="name">dat DINH</p>
+                    <p class="username">@dinhdat12</p>
+                </div>
+            </div>
+            <hr>
+            <ul>
+                <li>📌 Trang cá nhân</li>
+                <li>📝 Viết blog</li>
+                <li>📄 Bài viết của tôi</li>
+                <li>⭐ Bài viết đã lưu</li>
+                <hr>
+                <li>⚙️ Cài đặt</li>
+                <li class="logout">🔓 Đăng xuất</li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    
+    <script th:src="@{/js/personal_page_script.js}"></script>
+    </div>
+    </nav>
+
+    <div class="profile-card">
+        <div class="welcome-message">
+            <p>Xin chào <span>dinnhdat1012vn@gmail.com</span>. Chào mừng bạn đến với TOEIX. Hãy khám phá nhé!</p>
+        </div>
+        <div class="profile-info">
+            <div class="avatar">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar">
+                <p>dinnhdat1012vn@gmail.com</p>
+                
+                <div class="progress">
+                    <p>Thành tích của bạn</p>
+
+                <div class="progress-bar">
+                        <div class="progress-fill" style="width: 98%;"></div>
+                    </div>
+                    <span>1180/1201</span>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span>Khoá học</span>
+                    <span class="highlight">12/38</span>
+                    <span>4 chương mới</span>
+                </div>
+                <div class="stat-item">
+                    <span>Luyện tập</span>
+                    <span class="highlight">0/1445</span>
+                </div>
+                <div class="stat-item">
+                    <span>Thứ hạng tổng nhất</span>
+                    <span class="highlight">0/0 cuộc thi</span>
+                </div>
+            </div>
+            
+            <div class="badges">
+                <!-- Các biểu tượng huy hiệu có thể được thêm bằng cách sử dụng hình ảnh hoặc icon font -->
+                <img src="badge\badge1.png" alt="Badge 1">
+                <img src="badge\badge1.png" alt="Badge 2">
+                <img src="badge\badge1.png" alt="Badge 3">
+                <img src="badge\badge1.png" alt="Badge 4">
+                <img src="badge\badge1.png" alt="Badge 5">
+                <img src="badge\badge1.png" alt="Badge 6">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="skill_prof">
+    <div class="skill_title"> 
+        <h3>Kỹ năng cá nhân.</h3>
+    </div>
+
+    <div class="skill">Listening:<span class="stars">★★★☆☆</span></div>
+    <div class="skill">Speaking:<span class="stars">★★☆☆☆</span></div>
+    <div class="skill">Reading: <span class="stars">★★★★☆</span></div>
+    <div class="skill">Writing:<span class="stars">★★★☆☆</span></div>
+</div>
+
+    <!--Footer =================================================================================================================================-->
+    <footer class="footer_wrapper">
+        <div class="footer-column">
+            <h3>Học Tiếng Anh Để Đi Làm</h3>
+            <p>Điện thoại: 0398756015</p>
+            <p>Email: Dinhdat1012vn@gmail.com</p>
+            <p>Địa chỉ: Số 16, ngõ 257, Thanh Nhàn, Hai Bà Trưng, Hà Nội</p>
+        </div>
+        <div class="footer-column">
+            <h3>Về Chúng Tôi</h3>
+            <a href="#">Giới thiệu</a>
+            <a href="#">Liên hệ</a>
+            <a href="#">Điều khoản</a>
+            <a href="#">Bảo mật</a>
+        </div>
+        <div class="footer-column">
+            <h3>Sản phẩm</h3>
+            <a href="#">Sản Phẩm 1</a>
+            <a href="#">Sản Phẩm 2</a>
+            <a href="#">Sản phẩm 3</a>
+        </div>
+        <div class="footer-column">
+            <h3>Công cụ</h3>
+            <a href="#">sản phẩm 3</a>
+            <a href="#">Sản phẩm 2</a>
+        </div>
+        <div class="footer-column">
+            <h3>Theo dõi chúng tôi.</h3>
+            <div class="footer-social">
+                <img src="icon\ytb_icon.png" alt="YouTube">
+                <img src="icon\fb_icon.png" alt="Facebook">
+                <img src="icon\instagram.png" alt="instagram">
+            </div>
+        </div>
+    </footer>
+    <div class="footer-bottom">©2024 - 2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
+    </footer>
+</body>
+
+</html>
