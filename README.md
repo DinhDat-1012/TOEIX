@@ -28,9 +28,15 @@
 - **DevOps:** Docker, CI/CD với GitHub Actions  
 
 ---
+----
+##📬 Liên hệ
+- **📧 Email: dinhdat1012vn@gmail.com
+- **🔗 GitHub: DinhDat-1012
+- **📌 Hãy 🌟 Star repository nếu bạn thấy dự án hữu ích! 🚀
 
 ## ⚙️ Cài đặt  
 ### 1️⃣ Clone repository  
 ```bash
 git clone https://github.com/DinhDat-1012/TOEIX.git
 cd TOEIX
+
