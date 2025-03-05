@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } catch (error) {
             console.error("Lỗi:", error);
-            alert("Không thể kết nối đến máy chủ!");
+            alert("Đăng nhập thất bại!");
         }
     });
 

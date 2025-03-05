@@ -1,6 +1,7 @@
 package com.example.auth_service.Service;
 
 
+import com.example.auth_service.DTO.UserIdentityResponseDTO;
 import com.example.auth_service.DTO.UserRequestDTO;
 import com.example.auth_service.DTO.UserResponseDTO;
 import com.example.auth_service.Entity.User;
@@ -26,10 +27,32 @@ public class AuthService {
 
     public String authenticate(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
+        log.info("A request is query:" + userOpt.toString());
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
-            return jwtUtil.generateToken(username);
+            return jwtUtil.generateToken(username,userOpt.get().getEmail(), userOpt.get().getRoles());
         }
         throw new RuntimeException("Invalid credentials");
+    }
+
+    public boolean validateUserName2Token(String token, String username) {
+       if(jwtUtil.extractUsername(token).equals(username)) {
+           return true;
+       }else{
+           return false;
+       }
+    }
+
+    public UserIdentityResponseDTO tokenCheckValidAndExtractI4(String token) {
+        UserIdentityResponseDTO userIdentityResDTO = new UserIdentityResponseDTO();
+       if(jwtUtil.isTokenValid(token)){
+            userIdentityResDTO.setUsername(jwtUtil.extractUsername(token));
+            userIdentityResDTO.setEmail(jwtUtil.extractEmail(token));
+            userIdentityResDTO.setRole(jwtUtil.extractRole(token));
+            return userIdentityResDTO;
+       }else{
+           throw new RuntimeException("Invalid token");
+       }
+
     }
     public UserResponseDTO registerUser(UserRequestDTO request) {
         UserResponseDTO userResDTO = new UserResponseDTO(request.getUsername(),request.getEmail());

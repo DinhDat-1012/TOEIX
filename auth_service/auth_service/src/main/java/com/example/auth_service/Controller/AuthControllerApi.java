@@ -1,5 +1,7 @@
 package com.example.auth_service.Controller;
 
+import com.example.auth_service.DTO.UserIdentityRequestDTO;
+import com.example.auth_service.DTO.UserIdentityResponseDTO;
 import com.example.auth_service.DTO.UserRequestDTO;
 import com.example.auth_service.DTO.UserResponseDTO;
 import com.example.auth_service.Service.AuthService;
@@ -9,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
 
 @Slf4j
 @RestController
@@ -23,5 +24,22 @@ public class AuthControllerApi {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Type", "Register")
                 .body(authService.registerUser(UserRegisterRequest));
+    }
+    @PostMapping("/jwt-check")
+    public ResponseEntity<UserIdentityResponseDTO>  jwtCheckValid(@RequestBody UserIdentityRequestDTO request4check) {
+        if (authService.validateUserName2Token(request4check.getToken(), request4check.getUsername())) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .header("type", "jwt checked")
+                    .header("message", "valid")
+                    .header("status", "success")
+
+                    .body(authService.tokenCheckValidAndExtractI4(request4check.getToken()));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("type", "jwt checked")
+                    .header("message", "invalid")
+                    .header("status", "unsuccessful")
+                    .body(null);
+        }
     }
 }
