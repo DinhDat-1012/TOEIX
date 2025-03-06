@@ -18,9 +18,12 @@ public class UserControllerAPI {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRequestDTO request) {
-        AccCreatedAuthServAsyncDTO accCreatedAuthServAsyncDTO = new AccCreatedAuthServAsyncDTO(request.getUsername(),request.getPassword(), request.getEmail(), request.getRole());
-        userService.UserAccAsync2AuthServ(accCreatedAuthServAsyncDTO).subscribe();
-        return ResponseEntity.ok(userService.registerUser(request));
+        UserResponseDTO userResponseDTO = userService.registerUser(request);
+        if(userResponseDTO!=null) {
+            AccCreatedAuthServAsyncDTO accCreatedAuthServAsyncDTO = new AccCreatedAuthServAsyncDTO(request.getUsername(),request.getPassword(), request.getEmail(), request.getRole());
+            userService.UserAccAsync2AuthServ(accCreatedAuthServAsyncDTO).subscribe();
+            return ResponseEntity.ok(userResponseDTO);
+        }throw(new RuntimeException("Username already exists"));
     }
 
     @GetMapping("/{username}")

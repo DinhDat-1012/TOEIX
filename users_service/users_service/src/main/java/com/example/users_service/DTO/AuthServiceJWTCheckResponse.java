@@ -1,4 +1,4 @@
-package com.example.auth_service.DTO;
+package com.example.users_service.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserIdentityResponseDTO {
+public class AuthServiceJWTCheckResponse {
     String status;
     String username;
     String email;

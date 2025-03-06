@@ -28,18 +28,13 @@ public class AuthControllerApi {
     @PostMapping("/jwt-check")
     public ResponseEntity<UserIdentityResponseDTO>  jwtCheckValid(@RequestBody UserIdentityRequestDTO request4check) {
         if (authService.validateUserName2Token(request4check.getToken(), request4check.getUsername())) {
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
+            return ResponseEntity.status(HttpStatus.OK)
                     .header("type", "jwt checked")
-                    .header("message", "valid")
-                    .header("status", "success")
-
                     .body(authService.tokenCheckValidAndExtractI4(request4check.getToken()));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.OK)
                     .header("type", "jwt checked")
-                    .header("message", "invalid")
-                    .header("status", "unsuccessful")
-                    .body(null);
+                    .body(new UserIdentityResponseDTO("Invalid","null","null","null"));
         }
     }
 }

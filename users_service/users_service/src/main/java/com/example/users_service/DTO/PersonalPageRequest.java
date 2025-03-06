@@ -1,4 +1,4 @@
-package com.example.auth_service.DTO;
+package com.example.users_service.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserIdentityResponseDTO {
-    String status;
+public class PersonalPageRequest {
     String username;
-    String email;
-    String role;
+    String token;
 }

@@ -45,12 +45,17 @@ public class AuthService {
     public UserIdentityResponseDTO tokenCheckValidAndExtractI4(String token) {
         UserIdentityResponseDTO userIdentityResDTO = new UserIdentityResponseDTO();
        if(jwtUtil.isTokenValid(token)){
+            userIdentityResDTO.setStatus("valid");
             userIdentityResDTO.setUsername(jwtUtil.extractUsername(token));
             userIdentityResDTO.setEmail(jwtUtil.extractEmail(token));
             userIdentityResDTO.setRole(jwtUtil.extractRole(token));
             return userIdentityResDTO;
        }else{
-           throw new RuntimeException("Invalid token");
+           userIdentityResDTO.setStatus("valid");
+           userIdentityResDTO.setUsername("null");
+           userIdentityResDTO.setEmail("null");
+           userIdentityResDTO.setRole("null");
+           return userIdentityResDTO;
        }
 
     }

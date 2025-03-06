@@ -84,5 +84,19 @@ public class UserService{
                 .doOnSuccess(Response -> log.info("Response:"+ Response))
                 .doOnError(Error-> log.error("Error:"+ Error)); // Trả về dữ liệu từ AuthService
     }
+    public Mono<String> CheckValidToken(String username,String token) {
+        String url = "http://localhost:8000/auth-api/jwt-check";
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("username",username);
+        requestBody.put("token",token);
+        return webClientBuilder.build()
+                .post()
+                .uri(url)
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(String.class)
+                .doOnSuccess(Response -> log.info("Response:"+ Response))
+                .doOnError(Error -> log.error("Error:"+ Error));
+    }
 
 }

@@ -170,11 +170,14 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 let login_form = document.querySelector(".login_form_wrapper");
                 localStorage.setItem("authToken", result.token);//lưu token vào bộ nhớ.
-                alert("Đăng nhập thành công, token: "+ result.token);
+                localStorage.setItem("userName",username);
+                alert("Đăng nhập thành công, token: "+ result.token + " username:"+username);
 
                 alert("token đã được lưu vào bô nhớ: " + localStorage.getItem("authToken"));//lấy token từ bộ nhớ.
-
+                alert("username: "+ localStorage.getItem("userName"))
                 login_form.style.display = "none";
+
+                window.location.href = 'http://localhost:8080/personal';
             } else {
                 alert("Đăng nhập thất bại: " + (result.message || "Có lỗi xảy ra!"));
             }
