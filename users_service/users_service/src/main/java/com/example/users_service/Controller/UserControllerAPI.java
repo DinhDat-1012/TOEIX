@@ -1,9 +1,12 @@
 package com.example.users_service.Controller;
 
 import com.example.users_service.DTO.AccCreatedAuthServAsyncDTO;
+import com.example.users_service.DTO.AuthServiceJWTCheckResponse;
 import com.example.users_service.DTO.UserRequestDTO;
 import com.example.users_service.DTO.UserResponseDTO;
 import com.example.users_service.Service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +28,21 @@ public class UserControllerAPI {
             return ResponseEntity.ok(userResponseDTO);
         }throw(new RuntimeException("Username already exists"));
     }
+    @PostMapping("/get-user-profile")
+    public ResponseEntity<UserResponseDTO> getUser(@RequestHeader String token,@RequestHeader String username ) {
+        String response = userService.CheckValidToken(username, token).block();
+        ObjectMapper objectMapper = new ObjectMapper();
+        AuthServiceJWTCheckResponse authResponse;
+        try {
+            authResponse = objectMapper.readValue(response, AuthServiceJWTCheckResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Lỗi khi parse JSON", e);
+        }
+        if(authResponse.getStatus().equals("valid")) {
+            return ResponseEntity.ok(userService.getUserByUsername(username));
+        }else{
+            throw(new RuntimeException("Invalid token"));
+        }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 }

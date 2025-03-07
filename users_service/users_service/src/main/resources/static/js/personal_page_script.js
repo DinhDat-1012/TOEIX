@@ -1,3 +1,40 @@
+//=====================================================================================================
+//hàm khởi chạy nhận thông tin ngời dùng
+document.addEventListener("DOMContentLoaded", async function () {
+    // Lấy token và username từ localStorage
+    const token = localStorage.getItem("authToken");
+    const username = localStorage.getItem("userName");
+
+    if (!token || !username) {
+        window.location.href = "http://localhost:8080/staff";
+    }
+    try {
+        const response = await fetch("http://localhost:8080/users/get-user-profile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token,
+                "username": username
+            },
+            body: JSON.stringify({})
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById("fullName").textContent = data.username.toUpperCase();
+        document.getElementById("username").textContent ="@"+data.username || "N/A";
+
+        document.getElementById("user-email").textContent = data.email || "N/A";
+        document.getElementById("title-user-email").textContent = data.email || "N/A";
+
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+    }
+});
+//=====================================================================================================
 function toggleMenu() {
     let menu = document.getElementById("profileMenu");
     menu.style.display = (menu.style.display === "block") ? "none" : "block";

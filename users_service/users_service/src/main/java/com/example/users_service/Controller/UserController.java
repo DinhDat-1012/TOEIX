@@ -29,7 +29,6 @@ public class UserController {
 
     @GetMapping("/personal")
     public String showPersonalPage(Model model) {
-
         return "personal_page"; // Trả về tên file Thymeleaf trong templates
     }
 

@@ -50,15 +50,13 @@
         <div class="user_status"></div>
         </nav>
 
-    <div class="profile-container">
-
         <!-- Hộp thoại thông tin -->
         <div class="profile-menu" id="profileMenu">
             <div class="profile-header">
                 <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar" class="profile-pic">
                 <div class="profile-info">
-                    <p class="name">dat DINH</p>
-                    <p class="username">@dinhdat12</p>
+                    <p class="name" id="fullName">Anonymous</p>
+                    <p class="username" id="username">Anonymous</p>
                 </div>
             </div>
             <hr>
@@ -72,62 +70,52 @@
                 <li class="logout">🔓 Đăng xuất</li>
             </ul>
         </div>
-
-    </div>
-
-
-    
     <script th:src="@{/js/personal_page_script.js}"></script>
     </div>
     </nav>
 
-    <div class="profile-card">
+    <section class="profile-card-wrapper">
         <div class="welcome-message">
-            <p>Xin chào <span>dinnhdat1012vn@gmail.com</span>. Chào mừng bạn đến với TOEIX. Hãy khám phá nhé!</p>
+            <p>Xin chào <span id="title-user-email">n/a</span>. Chào mừng bạn đến với TOEIX. Hãy khám phá nhé!</p>
         </div>
-        <div class="profile-info">
-            <div class="avatar">
-                <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar">
-                <p>dinnhdat1012vn@gmail.com</p>
-                
-                <div class="progress">
-                    <p>Thành tích của bạn</p>
+        <div class="profile-info-wrapper">
+            <div class="profile-container">
+                <div class="avatar">
+                    <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar">
+                    <p id="user-email">n/a</p>
 
-                <div class="progress-bar">
-                        <div class="progress-fill" style="width: 98%;"></div>
+                    <div class="progress">
+                        <p>Thành tích của bạn</p>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 50%;"></div>
+                        </div>
+                        <span>1180/1201</span>
                     </div>
-                    <span>1180/1201</span>
                 </div>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <span>Khoá học</span>
+                        <span class="highlight">12/38</span>
+                        <span>4 chương mới</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Luyện tập</span>
+                        <span class="highlight">0/1445</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Thứ hạng tổng nhất</span>
+                        <span class="highlight">0/0 cuộc thi</span>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="stats">
-                <div class="stat-item">
-                    <span>Khoá học</span>
-                    <span class="highlight">12/38</span>
-                    <span>4 chương mới</span>
-                </div>
-                <div class="stat-item">
-                    <span>Luyện tập</span>
-                    <span class="highlight">0/1445</span>
-                </div>
-                <div class="stat-item">
-                    <span>Thứ hạng tổng nhất</span>
-                    <span class="highlight">0/0 cuộc thi</span>
-                </div>
-            </div>
-            
-            <div class="badges">
-                <!-- Các biểu tượng huy hiệu có thể được thêm bằng cách sử dụng hình ảnh hoặc icon font -->
-                <img src="badge\badge1.png" alt="Badge 1">
-                <img src="badge\badge1.png" alt="Badge 2">
-                <img src="badge\badge1.png" alt="Badge 3">
-                <img src="badge\badge1.png" alt="Badge 4">
-                <img src="badge\badge1.png" alt="Badge 5">
-                <img src="badge\badge1.png" alt="Badge 6">
-            </div>
+
         </div>
+    </section>
     </div>
-</div>
 <div class="skill_prof">
     <div class="skill_title"> 
         <h3>Kỹ năng cá nhân.</h3>
