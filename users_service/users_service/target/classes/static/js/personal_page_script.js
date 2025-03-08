@@ -68,3 +68,41 @@ document.addEventListener("click", function (event) {
         list.style.display = "none";
     }
 });
+//heatmap=======================================
+function renderCalendar() {
+    const studyData = {
+        "2025-03-01": 2, // Học vừa
+        "2025-03-08": 3, // Học cao
+        "2025-03-15": 1, // Học nhẹ
+        "2025-03-20": 4, // Học rất cao
+        "2025-03-25": 2  // Học vừa
+    };
+
+    const calendar = document.getElementById("calendar");
+    calendar.innerHTML = "";
+
+    const daysInMonth = 31; // Giả sử tháng có 31 ngày
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Tháng trong JS bắt đầu từ 0
+
+    document.getElementById("activity-heatmap-title").textContent = "Hoạt động tháng "+ month;
+
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        const activityLevel = studyData[dateStr]||0;
+
+        const div = document.createElement("div");
+        div.classList.add("day");
+        div.textContent = day;
+
+        // Thêm class màu theo mức độ học
+
+        div.classList.add("level-" + activityLevel);
+
+
+        calendar.appendChild(div);
+    }
+}
+document.addEventListener("DOMContentLoaded", renderCalendar);

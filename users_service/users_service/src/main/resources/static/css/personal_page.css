@@ -425,6 +425,10 @@ hr {
     width: 30px;
     height: 30px;
 }
+.user-learning-process{
+    display: flex;
+    gap: 20px;
+}
 .skill_prof{
     position: relative;
     display: inline-block;
@@ -455,6 +459,62 @@ hr {
 
     color: gold;
     justify-content: center;
+}
+/*Heatmap===========================*/
+.activity-heat-map-wrapper {
+    max-width: 500px;
+    height: auto;
+    margin: 0px 10px 20px 0px;
+    padding: 20px;
+    border-radius: 8px;
+    background: #34495e;
+}
+
+h3 {
+    color: #ffffff;
+    justify-self: center;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.day {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Màu sắc theo mức độ học */
+.level-1 { background: #dbeafe; } /* Nhẹ */
+.level-2 { background: #93c5fd; } /* Vừa */
+.level-3 { background: #3b82f6; } /* Cao */
+.level-4 { background: #1e40af; color: white; } /* Rất cao */
+
+.legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.legend span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    border-radius: 3px;
 }
 /*Hiển thị footer===============================================================================================================================*/
 .footer_wrapper {
