@@ -51,5 +51,9 @@ public class UserController {
         }throw (new RuntimeException("Invalid Token"));
 
     }
+    @GetMapping(path = "/home")
+    public String showHomePage(Model model) {
+        return "home_page";
+    }
 
 }
