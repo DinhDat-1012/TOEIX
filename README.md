@@ -1,4 +1,4 @@
-# 📌 TOEIX - Hệ thống học tiếng Anh cho người đi làm  
+# 📌 TOEIX - Hệ thống học tiếng Anh cho người Lười.  
 
 🚀 **TOEIX** là một hệ thống hỗ trợ học tiếng Anh trực tuyến dành cho người đi làm, giúp cải thiện kỹ năng ngôn ngữ thông qua các bài học, bài kiểm tra và phân tích tiến độ học tập.
 
