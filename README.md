@@ -45,19 +45,20 @@ cd TOEIX
 ##
 
 ## List API
-| Method | Endpoint                    | Mô tả                          | Yêu cầu Token |
-| ------ | --------------------------- | ------------------------------ | ------------- |
-| GET    | `/api/products/public`      | Lấy danh sách khóa học public  | ❌             |
-| GET    | `/api/products/public/{id}` | Chi tiết khóa học public       | ❌             |
-| GET    | `/api/products`             | Lấy tất cả khóa học            | ✅             |
-| GET    | `/api/products/{id}`        | Chi tiết khóa học              | ✅             |
-| GET    | `/api/products/search`      | Tìm kiếm khóa học theo từ khóa | ✅             |
-| GET    | `/api/products/filter`      | Lọc khóa học theo level        | ✅             |
-| GET    | `/api/products/page`        | Lấy khóa học có phân trang     | ✅             |
-| POST   | `/api/products`             | Thêm khóa học mới              | ✅ (ADMIN)     |
-| PUT    | `/api/products/{id}`        | Cập nhật khóa học              | ✅ (ADMIN)     |
-| DELETE | `/api/products/{id}`        | Xóa khóa học                   | ✅ (ADMIN)     |
-| PATCH  | `/api/products/{id}/status` | Thay đổi trạng thái khóa học   | ✅ (ADMIN)     |
-| GET    | `/api/products/{id}/stats`  | Thống kê khóa học              | ✅ (ADMIN)     |
-| GET    | `/api/products/recommend`   | Gợi ý khóa học cho người dùng  | ✅             |
+| Method | Endpoint                    | Mô tả                                  | Yêu cầu Token |
+| ------ |-----------------------------|----------------------------------------| ------------- |
+| GET    | `/api//v1/products/course`  | Lấy danh sách tất cả khóa học (public) | ❌             |
+| GET    | `/api/products/public`      | Lấy danh sách khóa học public          | ❌             |
+| GET    | `/api/products/public/{id}` | Chi tiết khóa học public               | ❌             |
+| GET    | `/api/products`             | Lấy tất cả khóa học                    | ✅             |
+| GET    | `/api/products/{id}`        | Chi tiết khóa học                      | ✅             |
+| GET    | `/api/products/search`      | Tìm kiếm khóa học theo từ khóa         | ✅             |
+| GET    | `/api/products/filter`      | Lọc khóa học theo level                | ✅             |
+| GET    | `/api/products/page`        | Lấy khóa học có phân trang             | ✅             |
+| POST   | `/api/products`             | Thêm khóa học mới                      | ✅ (ADMIN)     |
+| PUT    | `/api/products/{id}`        | Cập nhật khóa học                      | ✅ (ADMIN)     |
+| DELETE | `/api/products/{id}`        | Xóa khóa học                           | ✅ (ADMIN)     |
+| PATCH  | `/api/products/{id}/status` | Thay đổi trạng thái khóa học           | ✅ (ADMIN)     |
+| GET    | `/api/products/{id}/stats`  | Thống kê khóa học                      | ✅ (ADMIN)     |
+| GET    | `/api/products/recommend`   | Gợi ý khóa học cho người dùng          | ✅             |
 
