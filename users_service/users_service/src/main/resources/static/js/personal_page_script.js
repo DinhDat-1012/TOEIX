@@ -34,6 +34,54 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.error("Error fetching user profile:", error);
     }
 });
+//++++++++++++++++++++++++Lấy thông báo
+async function fetchNotifications() {
+    const token = localStorage.getItem("authToken");
+    const username = localStorage.getItem("userName");
+    try {
+        const response = await fetch('http://localhost:8080/users/api/v1/notification', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "username": username,
+                "token": token
+            },
+            body: JSON.stringify({}) // Nếu API yêu cầu dữ liệu trong body
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch notifications');
+        }
+
+        const notifications = await response.json();
+        displayNotifications(notifications);
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+    }
+}
+function displayNotifications(notifications) {
+    const container = document.getElementById('notification-container');
+    container.innerHTML = '';
+    notifications.forEach(notification => {
+        const notificationElement = document.createElement('div');
+        notificationElement.classList.add('notification');
+        notificationElement.innerHTML = `
+            <h4>${notification.title}</h4>
+            <p>${notification.message}</p>
+            <small>${new Date(notification.createdAt).toLocaleString()}</small>
+            </div>
+            
+        `;
+
+        if (notification.isRead) {
+            notificationElement.classList.add('read');
+        }
+
+        container.appendChild(notificationElement);
+    });
+}
+fetchNotifications();
+setInterval(fetchNotifications, 3000);//update after 3 seconds
 //=====================================================================================================
 function toggleMenu() {
     let menu = document.getElementById("profileMenu");

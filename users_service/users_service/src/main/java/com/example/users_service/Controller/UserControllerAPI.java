@@ -1,9 +1,7 @@
 package com.example.users_service.Controller;
 
-import com.example.users_service.DTO.AccCreatedAuthServAsyncDTO;
-import com.example.users_service.DTO.AuthServiceJWTCheckResponse;
-import com.example.users_service.DTO.UserRequestDTO;
-import com.example.users_service.DTO.UserResponseDTO;
+import com.example.users_service.DTO.*;
+import com.example.users_service.Service.NotificationService;
 import com.example.users_service.Service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,13 +10,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Slf4j
 public class UserControllerAPI {
     private final UserService userService;
-
+    private final NotificationService notificationService;
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRequestDTO request) {
         UserResponseDTO userResponseDTO = userService.registerUser(request);
@@ -44,5 +44,10 @@ public class UserControllerAPI {
             throw(new RuntimeException("Invalid token"));
         }
 
+    }
+    @PostMapping("/api/v1/notification")
+    public ResponseEntity<List<NotificationCreatedResponse>> getNotification(@RequestHeader String token, @RequestHeader String username ) {
+        List<NotificationCreatedResponse> notifications = notificationService.getNotifications(token,username);
+        return ResponseEntity.ok(notifications);
     }
 }
