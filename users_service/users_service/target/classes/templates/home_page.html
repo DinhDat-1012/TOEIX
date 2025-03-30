@@ -11,14 +11,80 @@
 <body>
 
 <nav class="head_bar" id="head_bar">
-    <a href="/static">
+    <a href="/home">
         <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px; color: rgb(250, 250, 254); position: relative;margin-bottom: 20%;"></i>
     </a>
     <a class="Web_subTitle" >ToeiX - Học tiếng Anh ngay! </a>
     <div class="serch_box">
         <div class="serch_box_icon">
-            <input class="_input_15ttk_39" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+            <input class="_input_15ttk_39" id="__serch_box" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+            <div id="search_results"> </div>
         </div>
+        <script>
+            const searchBox = document.getElementById('__serch_box');
+            const searchResults = document.getElementById('search_results');
+
+            document.addEventListener('click', (event) => {
+                const isClickInsideInput = searchBox.contains(event.target);
+                const isClickInsideResults = searchResults.contains(event.target);
+
+                if (!isClickInsideInput && !isClickInsideResults) {
+                    searchBox.value = ''; // xóa nội dung input
+                    searchResults.innerHTML = ''; // ẩn kết quả tìm kiếm
+                }
+            });
+
+            searchBox.addEventListener('input', ()=> {
+                const keyword = searchBox.value.trim();
+                if (keyword.length < 1) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
+                fetch(`http://localhost:8090/product/api/v1/courses/search?keyword=${encodeURIComponent(keyword)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResults.innerHTML = '';
+                        searchResults.style.borderRadius= "5px";
+                        searchResults.style.overflow= "hidden";
+                        searchResults.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                        searchResults.style.backgroundColor = "#fff";
+                        searchResults.style.marginTop = "5px";
+
+                        if (data.length === 0) {
+                            const notFound = document.createElement('div');
+                            notFound.textContent = 'Không tìm thấy kết quả cho:' + searchBox.value;
+                            notFound.style.padding = "10px";
+                            notFound.style.color = "red";
+                            notFound.style.textAlign = "center";
+                            notFound.style.cursor = "pointer";
+                            searchResults.appendChild(notFound);
+                            return;}
+
+                        data.forEach(course => {
+                            const div = document.createElement('div');
+                            div.className = 'result-item';
+                            div.style.color = "black"; // màu chữ
+                            div.style.backgroundColor = "#e5e7e9"; // màu nền
+                            div.style.padding = "10px"; // khoảng cách trong
+                            div.style.cursor = "pointer";
+                            div.textContent = `${course.courseName} - ${course.courseCode}`;
+                            div.addEventListener("mouseover", () => {
+                                div.style.backgroundColor = "#d5dbdb"; });
+                            div.addEventListener("mouseout", () => {
+                                div.style.backgroundColor = "#e5e7e9"; });
+                            div.addEventListener('click', () => {
+                                alert(`Bạn đã chọn: ${course.courseName}`);
+                                searchBox.value = course.courseName;
+                                searchResults.innerHTML = '';
+                            });
+                            searchResults.appendChild(div);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
     </div>
 
     <div class="user_courses">
@@ -74,11 +140,72 @@
     </div>
 </nav>
 <!-- Hiển thị thông tin khoóa học & bài viết-->
-<section class="home_banner_wrapper">
-    <div class="home_banner">
-        <img th:src="@{/banner/slide_1.png}" alt="banner">
+<div class="slider-container">
+    <div class="slider">
+        <div class="slide"><img th:src="@{banner/slide_1.png}" alt="Slide 1"></div>
+        <div class="slide"><img th:src="@{banner/slide_2.png}" alt="Slide 2"></div>
+        <div class="slide"><img th:src="@{banner/slide_3.png}" alt="Slide 3"></div>
+        <div class="slide"><img th:src="@{banner/slide_4.png}" alt="Slide 3"></div>
+        <div class="slide"><img th:src="@{banner/slide_5.png}" alt="Slide 3"></div>
     </div>
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slider = document.querySelector('.slider');
+        const totalSlides = slides.length;
 
+        function showSlide(index) {
+            if (index >= totalSlides) {
+                currentIndex = 0;
+            } else if (index < 0) {
+                currentIndex = totalSlides - 1;
+            } else {
+                currentIndex = index;
+            }
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        document.querySelector('.next').addEventListener('click', () => {
+            showSlide(currentIndex + 1);
+        });
+
+        document.querySelector('.prev').addEventListener('click', () => {
+            showSlide(currentIndex - 1);
+        });
+
+        function autoSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        let slideInterval = setInterval(autoSlide, 3000);
+
+        // Dừng tự động khi di chuột vào slider
+        document.querySelector('.slider-container').addEventListener('mouseover', () => {
+            clearInterval(slideInterval);
+        });
+
+        // Tiếp tục khi rời chuột
+        document.querySelector('.slider-container').addEventListener('mouseleave', () => {
+            slideInterval = setInterval(autoSlide, 3000);
+        });
+    </script>
+</div>
+
+<!--Thông tin các khóa học =================================================================================================================-->
+<section class="new_course_container">
+    <div class="course_header">
+        <h3>Khóa học mới dành cho bạn. <span>Mới</span></h3>
+        <span class="new_course_view_all">Xem tất cả.</span>
+    </div>
+</section>
+<section class="new_course_infor">
+    <div class="course"></div>
+    <div class="course"></div>
+    <div class="course"></div>
+    <div class="course"></div>
+    <div class="course"></div>
 </section>
 <!--Footer =================================================================================================================================-->
 <footer class="footer_wrapper">

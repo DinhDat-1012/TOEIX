@@ -14,7 +14,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findCoursesByCourseName(String courseName);
     List<Course> findByCourseNameContaining(String keyword);
     List<Course> findByPriceBetween(Double min, Double max);
-
+    List<Course> findByCourseNameContainingIgnoreCase(String keyword);
     List<Course> findByCreatedAt(LocalDateTime createdAt);
     List<Course> findByUpdatedAt(LocalDateTime updatedAt);
     @Query(value = "SELECT c.* FROM course c " +

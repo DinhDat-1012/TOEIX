@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -30,8 +31,19 @@ public class User {
     private LocalDate birthday;
     private String address;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PurchasedCourse> purchasedCourses;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserLearningHistory> learningHistories;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Skill skill;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
 }
 

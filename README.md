@@ -62,3 +62,9 @@ cd TOEIX
 | GET    | `/api/products/{id}/stats`  | Thống kê khóa học                      | ✅ (ADMIN)     |
 | GET    | `/api/products/recommend`   | Gợi ý khóa học cho người dùng          | ✅             |
 
+## Database
+
+### UserService MYSQL
+![img.png](img.png)
+### ProductService (POSTGESQL)
+![img_1.png](img_1.png)

@@ -37,4 +37,7 @@ public class CourseService {
                         .build())
                 .collect(Collectors.toList());
     }
+    public List<Course> searchCourse(String keyword) {
+        return course_repository.findByCourseNameContainingIgnoreCase(keyword);
+    }
 }
