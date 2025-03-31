@@ -87,9 +87,10 @@
         </script>
     </div>
 
-    <div class="user_courses">
-        <div class="user_courses_title">
+    <div class="user_courses" >
+        <div class="user_courses_title"  id="user_courses_title">
             <p>Khóa khọc của tôi</p>
+            <div id="user-course-container" style="position: absolute; display: none; background-color: #f0f0f0;z-index: 8;overflow: hidden;border-radius: 10px;top: 60px"></div>
         </div>
         <i class="fa fa-caret-down" aria-hidden="true"></i>
     </div>
@@ -101,11 +102,7 @@
 
     <div id="notification-list" class="notification-list">
         <p class="title">Thông báo</p>
-        <ul>
-            <li>📢 Hôm nay có khuyến mãi 50%!</li>
-            <li>🆕 Bài viết mới về lập trình web.</li>
-            <li>⚠️ Bạn có tin nhắn chưa đọc.</li>
-        </ul>
+        <div id="notification-container"></div>
     </div>
 
     <div class="navBar_">
@@ -127,13 +124,13 @@
             </div>
             <hr>
             <ul>
-                <li>📌 Trang cá nhân</li>
+                <a href="/personal" style="text-decoration: none"><li>📌 Trang cá nhân</li></a>
                 <li>📝 Viết blog</li>
                 <li>📄 Bài viết của tôi</li>
                 <li>⭐ Bài viết đã lưu</li>
                 <hr>
                 <li>⚙️ Cài đặt</li>
-                <li class="logout">🔓 Đăng xuất</li>
+                <li class="logout" onclick="logOut()">🔓 Đăng xuất</li>
             </ul>
         </div>
         <script th:src="@{/js/home_page_script.js}"></script>

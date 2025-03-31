@@ -2,6 +2,7 @@ package com.example.users_service.Controller;
 
 import com.example.users_service.DTO.*;
 import com.example.users_service.Service.NotificationService;
+import com.example.users_service.Service.UserCourseService;
 import com.example.users_service.Service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,8 @@ import java.util.List;
 public class UserControllerAPI {
     private final UserService userService;
     private final NotificationService notificationService;
+    private final UserCourseService userCourseService;
+
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRequestDTO request) {
         UserResponseDTO userResponseDTO = userService.registerUser(request);
@@ -49,5 +52,10 @@ public class UserControllerAPI {
     public ResponseEntity<List<NotificationCreatedResponse>> getNotification(@RequestHeader String token, @RequestHeader String username ) {
         List<NotificationCreatedResponse> notifications = notificationService.getNotifications(token,username);
         return ResponseEntity.ok(notifications);
+    }
+    @PostMapping("/api/v1/my-course")
+    public ResponseEntity<List<UserCourseResponseDTO>> getUserCourse(@RequestHeader  String token, @RequestHeader String username) {
+        List<UserCourseResponseDTO> userCourseResponse = userCourseService.findUserCourseByUserName(token,username);
+        return ResponseEntity.ok(userCourseResponse);
     }
 }

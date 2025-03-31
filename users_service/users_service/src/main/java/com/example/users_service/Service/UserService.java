@@ -57,7 +57,9 @@ public class UserService{
         userRepository.save(user);
         return new UserResponseDTO(user.getUsername(), user.getEmail(), user.getFullName(), role.getName());
     }
-
+    public Long getUserIdByUsername(String username) {
+        return userRepository.findByUsername(username).map(User::getId).orElseThrow(()->new RuntimeException("User not found"+ username));
+    }
     public UserResponseDTO getUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));

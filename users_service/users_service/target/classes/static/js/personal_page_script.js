@@ -62,7 +62,6 @@ async function fetchNotifications() {
 function displayNotifications(notifications) {
     const container = document.getElementById('notification-container');
     container.innerHTML = '';
-
     notifications.forEach(notification => {
         const notificationElement = document.createElement('div');
         notificationElement.classList.add('notification');
@@ -82,8 +81,77 @@ function displayNotifications(notifications) {
     });
 }
 fetchNotifications();
-setInterval(fetchNotifications, 3000);
+setInterval(fetchNotifications, 3000);//update after 3 seconds
+//======================================================
+//Lấy danh sách khóa học của người dùng
+async function fetchCourse() {
+    const token = localStorage.getItem("authToken");
+    const username = localStorage.getItem("userName");
+    try {
+        const response = await fetch('http://localhost:8080/users/api/v1/my-course', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "username": username,
+                "token": token
+            },
+            body: JSON.stringify({}) // Nếu API yêu cầu dữ liệu trong body
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch user course');
+        }
+
+        const course = await response.json();
+        displayUserCourse(course);
+    } catch (error) {
+        console.error('Error fetching user course:', error);
+    }
+}
+function displayUserCourse(course) {
+    const container = document.getElementById('user-course-container');
+    container.innerHTML = '';
+    course.forEach(course => {
+        const courseElement = document.createElement('div');
+        courseElement.classList.add('user-course');
+        courseElement.innerHTML = `
+            <div style="display: flex; padding: 15px">
+            <h4 style="color: black">${" "+ course.courseCode}</h4>
+            <p style="color: black">${" "+ course.course_names}</p>
+            
+            </div>
+            <small style="color: black;padding-left: 15px">${new Date(course.purchaseDate).toLocaleString()}</small>
+        `;
+        courseElement.addEventListener("mouseover", () => {
+            courseElement.style.backgroundColor = "#d5dbdb"; });
+        courseElement.addEventListener("mouseout", () => {
+            courseElement.style.backgroundColor = "#fff"; });
+        container.appendChild(courseElement);
+    });
+}
+fetchCourse();
+setInterval(fetchCourse, 3000);
+
+const user_courses_title = document.getElementById("user_courses_title");
+const container = document.getElementById('user-course-container');
+document.addEventListener('click', (event) => {
+    const isClicktagetTitle = user_courses_title.contains(event.target);
+    const isClickTagetContainer = container.contains(event.target);
+    if (isClicktagetTitle||isClickTagetContainer) {
+        container.style.display = "block";
+    }else{
+        container.style.display = "none";
+    }
+})
 //=====================================================================================================
+//Chức năng đăng xuất(logOUt function)
+function logOut(){
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userName");
+
+    window.location.href = "http://localhost:8080/staff";
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function toggleMenu() {
     let menu = document.getElementById("profileMenu");
     menu.style.display = (menu.style.display === "block") ? "none" : "block";

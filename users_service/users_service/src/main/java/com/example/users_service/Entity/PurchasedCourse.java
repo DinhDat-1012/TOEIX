@@ -18,6 +18,8 @@ public class PurchasedCourse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "course_code", nullable = false)
+    private String courseCode;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
