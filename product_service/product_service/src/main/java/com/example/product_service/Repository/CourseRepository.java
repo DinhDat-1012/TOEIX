@@ -24,6 +24,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             "LIMIT 1",
             nativeQuery = true)
     Course findTopRatedCourse();
-
+    List<Course> findByPriceEquals(Double price);
 
 }

@@ -1,6 +1,7 @@
 package com.example.product_service.Service;
 
 import com.example.product_service.DTO.CourseInformationResponse;
+import com.example.product_service.DTO.FreeCourseResponse;
 import com.example.product_service.Entity.Course;
 import com.example.product_service.Repository.CourseRepository;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,16 @@ public class CourseService {
     }
     public List<Course> searchCourse(String keyword) {
         return course_repository.findByCourseNameContainingIgnoreCase(keyword);
+    }
+    public List<FreeCourseResponse> findFreeCourses() {
+        return course_repository.findByPriceEquals((double)0).stream().map(
+                course -> FreeCourseResponse.builder()
+                        .courseUrl(course.getCourseUrl())
+                        .courseCode(course.getCourseCode())
+                        .courseName(course.getCourseName())
+                        .description(course.getDescription())
+                        .imageUrl(course.getCourseImgUrl())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

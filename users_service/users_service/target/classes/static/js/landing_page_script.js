@@ -207,4 +207,5 @@ function showSlides() {
     slides[slideIndex - 1].classList.add("fade");
     setTimeout(showSlides, 6000);
 }
+
 document.addEventListener("DOMContentLoaded", showSlides);

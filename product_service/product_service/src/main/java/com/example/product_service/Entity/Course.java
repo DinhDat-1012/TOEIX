@@ -58,6 +58,8 @@ public class Course {
     private List<Category> categories = new ArrayList<>();
     @Column(name = "course_url")
     private String courseUrl;
+    @Column(name = "course_img_url")
+    private String courseImgUrl;
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
