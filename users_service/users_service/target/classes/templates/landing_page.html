@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{../css/landing_page.css}">
     <script th:src="@{../js/landing_page_script.js}"></script>
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
+    <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
 </head>
 <body>
     
@@ -208,36 +209,81 @@
     </span>
   </div>
 
-  <section class="free_course_container">
-    <div class="course-card">
-        <img th:src="@{/Course_img/pre_ielts_course.png}" alt="Khóa học naang cao">
-        <div class="course-content">
-            <div class="course-title">Pre IELTS</div>
-            <div class="course-price">Miễn phí</div>
+    <section class="free_course_container">
+        <div class="course-card free_course">
+            <img th:src="@{/Course_img/pre_ielts_course.png}" alt="Khóa học nâng cao">
+            <div class="course-content">
+                <div class="course-title">Pre IELTS</div>
+                <div class="course-price">Miễn phí</div>
+            </div>
         </div>
-    </div>
-    <div class="course-card">
-        <img th:src="@{/Course_img/toeic_course.png}" alt="Khóa học nâng cao">
-        <div class="course-content">
-            <div class="course-title">TOEIC 450+</div>
-            <div class="course-price">Miễn phí</div>
+        <div class="course-card free_course">
+            <img th:src="@{/Course_img/toeic_course.png}" alt="Khóa học nâng cao">
+            <div class="course-content">
+                <div class="course-title">TOEIC 450+</div>
+                <div class="course-price">Miễn phí</div>
+            </div>
         </div>
-    </div>
-    <div class="course-card">
-        <img th:src="@{/Course_img/ielts_course.png}" alt="Khóa học nâng cao">
-        <div class="course-content">
-            <div class="course-title">INCOMPETENT IELTS</div>
-            <div class="course-price">Miễn phí</div>
+        <div class="course-card free_course">
+            <img th:src="@{/Course_img/ielts_course.png}" alt="Khóa học nâng cao">
+            <div class="course-content">
+                <div class="course-title">INCOMPETENT IELTS</div>
+                <div class="course-price">Miễn phí</div>
+            </div>
         </div>
-    </div>
-    <div class="course-card">
-      <img th:src="@{Course_img/toeic_course.png}" alt="Khóa học nâng cao">
-      <div class="course-content">
-          <div class="course-title">TOEIC 500+</div>
-          <div class="course-price">Miễn phí</div>
-      </div>
-  </div>
-</section>
+        <div class="course-card free_course">
+            <img th:src="@{/Course_img/toeic_course.png}" alt="Khóa học nâng cao">
+            <div class="course-content">
+                <div class="course-title">TOEIC 500+</div>
+                <div class="course-price">Miễn phí</div>
+            </div>
+        </div>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:8090/product/api/v1/courses/free-courses")
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.querySelector(".free_course_container");
+                    container.innerHTML = ""; // Xóa nếu có sẵn phần tử
+
+                    data.slice(0, 4).forEach(course => {
+                        const courseCard = document.createElement("div");
+                        courseCard.className = "course-card free_course";
+
+                        const img = document.createElement("img");
+                        // Nếu imageUrl là null thì dùng ảnh mặc định
+                        img.src = course.imageUrl || "/Course_img/toeic_course.png";
+                        img.alt = course.courseName;
+
+                        const contentDiv = document.createElement("div");
+                        contentDiv.className = "course-content";
+
+                        const titleDiv = document.createElement("div");
+                        titleDiv.className = "course-title";
+                        titleDiv.textContent = course.courseName;
+                        const descriptionDiv = document.createElement("div")
+                        descriptionDiv.className ="course_description"
+                        descriptionDiv.textContent = course.description;
+                        const priceDiv = document.createElement("div");
+                        priceDiv.className = "course-price";
+                        priceDiv.textContent = "Miễn phí";
+                        priceDiv.style.padding = "10px";
+
+
+                        contentDiv.appendChild(titleDiv);
+                        contentDiv.appendChild(descriptionDiv);
+                        contentDiv.appendChild(priceDiv);
+
+                        courseCard.appendChild(img);
+                        courseCard.appendChild(contentDiv);
+
+                        container.appendChild(courseCard);
+                    });
+                })
+                .catch(error => console.error("Lỗi khi tải khóa học miễn phí:", error));
+        });
+    </script>
 <!--Khóa học Pro====================================================-->
 
   <div class="pro_course_heading">
