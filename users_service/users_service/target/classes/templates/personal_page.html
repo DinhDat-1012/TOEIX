@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
 </head>
 <body>
-    
+
     <nav class="head_bar" id="head_bar">
         <a href="/home">
             <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px; color: rgb(250, 250, 254); position: relative;margin-bottom: 20%;"></i>
@@ -238,6 +238,89 @@
                 <img src="icon\instagram.png" alt="instagram">
             </div>
         </div>
+        <!--plugin từ điển-->
+
+        <style>
+            #dict-toggle-btn {
+                position: fixed;
+                bottom: 250px;
+                right: 10px;
+                background-color: #2f86eb;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+                cursor: pointer;
+                z-index: 9999;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            }
+
+            #dict-container {
+                position: fixed;
+                bottom: 20px;
+                right: 70px;
+                display: none;
+                z-index: 9999;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+        </style>
+
+        <!-- Button kích hoạt từ điển -->
+        <button id="dict-toggle-btn">
+            <i class="fa fa-book" aria-hidden="true" style="color: #5a5959;font-size: 16px"></i>
+        </button>
+
+        <!-- Vị trí container từ điển -->
+        <div id="dict-container">
+            <script id="lbdict_plugin_frame" type="text/javascript">
+                !function(){
+                    var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
+                    function loadScript(t,e){
+                        var n=document.createElement("script");
+                        n.type="text/javascript";
+                        n.readyState?n.onreadystatechange=function(){
+                            ("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())
+                        }:n.onload=function(){
+                            e()
+                        };
+                        n.src=t;
+                        q=document.getElementById("lbdict_plugin_frame");
+                        q.parentNode.insertBefore(n,q);
+                    }
+                    setTimeout(function(){
+                        loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
+                            lbDictPluginFrame.init(h);
+                        })
+                    },1000);
+                }();
+            </script>
+        </div>
+
+        <script>
+            const toggleBtn = document.getElementById('dict-toggle-btn');
+            const dictContainer = document.getElementById('dict-container');
+
+            toggleBtn.addEventListener('click', (e) => {
+                dictContainer.style.display = dictContainer.style.display === 'none' ? 'block' : 'none';
+                e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+            });
+
+            // Ngăn click trong hộp làm ẩn nó
+            dictContainer.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Click ngoài sẽ ẩn hộp từ điển
+            document.addEventListener('click', () => {
+                dictContainer.style.display = 'none';
+            });
+        </script>
+
+        <!--plugin dictionary-->
+
     </footer>
     <div class="footer-bottom">©2024 - 2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
     </footer>

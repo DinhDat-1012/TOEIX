@@ -35,6 +35,8 @@ public class CourseService {
                         .courseName(course.getCourseName())
                         .description(course.getDescription())
                         .price(course.getPrice())
+                        .courseUrl(course.getCourseUrl())
+                        .imageUrl(course.getCourseImgUrl())
                         .build())
                 .collect(Collectors.toList());
     }

@@ -15,4 +15,6 @@ public class CourseInformationResponse {
     private String courseName;
     private String description;
     private Double price;
+    private String imageUrl;
+    private String courseUrl;
 }

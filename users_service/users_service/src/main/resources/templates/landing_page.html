@@ -162,43 +162,71 @@
     <!--Hiển thị các khóa học===================================================================================================================-->
     <!--Hiển thị khóa học mới-->
     <section class="new_course_heading">
-      <span >
-          Khóa học mới
-          <span class="new_course_label">New</span>
-      </span>
+  <span>
+    Khóa học mới
+    <span class="new_course_label">New</span>
+  </span>
     </section>
 
     <section class="new_course_container">
-      <div class="course-card">
-          <img th:src="@{Course_img/pre_ielts_course.png}" alt="Khóa học mới 1">
-          <div class="course-content">
-              <div class="course-title">Pre IELTS</div>
-              <div class="course-price">1.299.000đ</div>
-          </div>
-      </div>
-      <div class="course-card">
-          <img th:src="@{Course_img/toeic_course.png}" alt="Khóa học mơi">
-          <div class="course-content">
-              <div class="course-title">TOEIC 450+</div>
-              <div class="course-price">1.399.000đ</div>
-          </div>
-      </div>
-      <div class="course-card">
-          <img th:src="@{Course_img/ielts_course.png}" alt="khóa học mới">
-          <div class="course-content">
-              <div class="course-title">INCOMPETENT IELTS</div>
-              <div class="course-price">299.000đ</div>
-          </div>
-      </div>
-      <div class="course-card">
-        <img th:src="@{/Course_img/toeic_course.png}" alt="khóa học mới">
-        <div class="course-content">
-            <div class="course-title">TOEIC 500+</div>
-            <div class="course-price">1.399.000đ</div>
-        </div>
-    </div>
-  </section>
-<!--Khóa học miễn phí=====================================================-->
+        <!-- Dữ liệu cứng có thể được thay thế sau bằng dữ liệu từ API -->
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("http://localhost:8090/product/api/v1/all-course")
+                .then(response => response.json())
+                .then(data => {
+                    const nc_container = document.querySelector(".new_course_container");
+                    nc_container.innerHTML = ""; // Xóa nội dung cũ nếu có
+
+                    if (!Array.isArray(data)) {
+                        console.error("Dữ liệu không hợp lệ:", data);
+                        return;
+                    }
+
+                    console.log("Khóa học mới:", data.slice(0, 4)); // Debug
+
+                    data.slice(0, 4).forEach(course => {
+                        const courseCard = document.createElement("div");
+                        courseCard.className = "course-card new_course";
+
+                        const img = document.createElement("img");
+                        img.src = course.imageUrl || "/Course_img/toeic_course.png";
+                        img.alt = course.courseName || "Khóa học";
+
+                        const contentDiv = document.createElement("div");
+                        contentDiv.className = "course-content";
+
+                        const titleDiv = document.createElement("div");
+                        titleDiv.className = "course-title";
+                        titleDiv.textContent = course.courseName || "Tên khóa học";
+
+                        const descriptionDiv = document.createElement("div");
+                        descriptionDiv.className = "course_description";
+                        descriptionDiv.textContent = course.description || "";
+
+                        const priceDiv = document.createElement("div");
+                        priceDiv.className = "course-price";
+                        priceDiv.textContent = course.price ? course.price + "$" : "Miễn phí";
+                        priceDiv.style.padding = "10px";
+
+                        contentDiv.appendChild(titleDiv);
+                        contentDiv.appendChild(descriptionDiv);
+                        contentDiv.appendChild(priceDiv);
+
+                        courseCard.appendChild(img);
+                        courseCard.appendChild(contentDiv);
+
+                        nc_container.appendChild(courseCard);
+                    });
+                })
+                .catch(error => console.error("Lỗi khi tải khóa học mới:", error));
+        });
+    </script>
+
+
+    <!--Khóa học miễn phí=====================================================-->
 
   <div class="free_course_heading">
     <span >
@@ -326,7 +354,88 @@
       </div>
   </div>
 </section>
-  
+    <!--plugin từ điển-->
+
+    <style>
+        #dict-toggle-btn {
+            position: fixed;
+            bottom: 250px;
+            right: 10px;
+            background-color: #2f86eb;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        #dict-container {
+            position: fixed;
+            bottom: 20px;
+            right: 70px;
+            display: none;
+            z-index: 9999;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+
+    <!-- Button kích hoạt từ điển -->
+    <button id="dict-toggle-btn">
+        <i class="fa fa-book" aria-hidden="true" style="color: #5a5959;font-size: 16px"></i>
+    </button>
+
+    <!-- Vị trí container từ điển -->
+    <div id="dict-container">
+        <script id="lbdict_plugin_frame" type="text/javascript">
+            !function(){
+                var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
+                function loadScript(t,e){
+                    var n=document.createElement("script");
+                    n.type="text/javascript";
+                    n.readyState?n.onreadystatechange=function(){
+                        ("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())
+                    }:n.onload=function(){
+                        e()
+                    };
+                    n.src=t;
+                    q=document.getElementById("lbdict_plugin_frame");
+                    q.parentNode.insertBefore(n,q);
+                }
+                setTimeout(function(){
+                    loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
+                        lbDictPluginFrame.init(h);
+                    })
+                },1000);
+            }();
+        </script>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('dict-toggle-btn');
+        const dictContainer = document.getElementById('dict-container');
+
+        toggleBtn.addEventListener('click', (e) => {
+            dictContainer.style.display = dictContainer.style.display === 'none' ? 'block' : 'none';
+            e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+        });
+
+        // Ngăn click trong hộp làm ẩn nó
+        dictContainer.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Click ngoài sẽ ẩn hộp từ điển
+        document.addEventListener('click', () => {
+            dictContainer.style.display = 'none';
+        });
+    </script>
+
+    <!--plugin dictionary-->
   <!--Footer =================================================================================================================================-->
   <footer class="footer_wrapper">
   <div class="footer-column">

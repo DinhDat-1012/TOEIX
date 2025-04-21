@@ -25,7 +25,7 @@ public class ProductController {
 @Autowired
 private final  CourseService course_service;
 
-
+@CrossOrigin(origins = "*")
 @GetMapping(path = "/v1/all-course")
 public ResponseEntity<List<CourseInformationResponse>> getAllCourse(){
     try{
