@@ -187,7 +187,7 @@
 
                     console.log("Khóa học mới:", data.slice(0, 4)); // Debug
 
-                    data.slice(0, 4).forEach(course => {
+                    data.slice(4, 8).forEach(course => {
                         const courseCard = document.createElement("div");
                         courseCard.className = "course-card new_course";
 
@@ -434,7 +434,6 @@
             dictContainer.style.display = 'none';
         });
     </script>
-
     <!--plugin dictionary-->
   <!--Footer =================================================================================================================================-->
   <footer class="footer_wrapper">

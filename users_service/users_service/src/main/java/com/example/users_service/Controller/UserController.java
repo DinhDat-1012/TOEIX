@@ -32,6 +32,10 @@ public class UserController {
         return "personal_page"; // Trả về tên file Thymeleaf trong templates
     }
 
+    @GetMapping("/review")
+    public String showReviewPage(Model model) {
+        return "review_page"; // Trả về tên file Thymeleaf trong templates
+    }
     @GetMapping("/test-personal")
     public String showPersonalPage(@RequestHeader String username,@RequestHeader String token ,Model model) {
 

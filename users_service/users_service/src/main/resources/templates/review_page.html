@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang cá nhân</title>
-    <link rel="stylesheet" th:href="@{/css/home_page.css}">
+    <title>Ôn tập từ mới</title>
+    <link rel="stylesheet" th:href="@{/css/review_page.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
     <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
 </head>
@@ -126,220 +126,23 @@
             <hr>
             <ul>
                 <a href="/personal" style="text-decoration: none"><li>📌 Trang cá nhân</li></a>
-                <a href="/review" style="text-decoration: none"><li>📝 Ôn tập từ mới</li></a>
-                <li>📄 Ôn tập từ mơí</li>
+                <li>📝 Viết blog</li>
+                <li>📄 Ôn tập từ mới</li>
                 <li>⭐ Bài học đã lưu</li>
                 <hr>
                 <li>⚙️ Cài đặt</li>
                 <li class="logout" onclick="logOut()">🔓 Đăng xuất</li>
             </ul>
         </div>
-        <script th:src="@{/js/home_page_script.js}"></script>
+        <script th:src="@{/js/review_page_script.js}"></script>
     </div>
 </nav>
-<!-- Hiển thị thông tin khoóa học & bài viết-->
-<div class="slider-container">
-    <div class="slider">
-        <div class="slide"><img th:src="@{banner/slide_1.png}" alt="Slide 1"></div>
-        <div class="slide"><img th:src="@{banner/slide_2.png}" alt="Slide 2"></div>
-        <div class="slide"><img th:src="@{banner/slide_3.png}" alt="Slide 3"></div>
-        <div class="slide"><img th:src="@{banner/slide_4.png}" alt="Slide 3"></div>
-        <div class="slide"><img th:src="@{banner/slide_5.png}" alt="Slide 3"></div>
-    </div>
-    <button class="prev">&#10094;</button>
-    <button class="next">&#10095;</button>
-    <script>
-        let currentIndex = 0;
-        const slides = document.querySelectorAll('.slide');
-        const slider = document.querySelector('.slider');
-        const totalSlides = slides.length;
+<!--page content============================================================================================================================-->
+<!--space for word review-->
+<div class="word_review_wrapper wrapper">
 
-        function showSlide(index) {
-            if (index >= totalSlides) {
-                currentIndex = 0;
-            } else if (index < 0) {
-                currentIndex = totalSlides - 1;
-            } else {
-                currentIndex = index;
-            }
-            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-
-        document.querySelector('.next').addEventListener('click', () => {
-            showSlide(currentIndex + 1);
-        });
-
-        document.querySelector('.prev').addEventListener('click', () => {
-            showSlide(currentIndex - 1);
-        });
-
-        function autoSlide() {
-            showSlide(currentIndex + 1);
-        }
-
-        let slideInterval = setInterval(autoSlide, 3000);
-
-        // Dừng tự động khi di chuột vào slider
-        document.querySelector('.slider-container').addEventListener('mouseover', () => {
-            clearInterval(slideInterval);
-        });
-
-        // Tiếp tục khi rời chuột
-        document.querySelector('.slider-container').addEventListener('mouseleave', () => {
-            slideInterval = setInterval(autoSlide, 3000);
-        });
-    </script>
 </div>
 
-<!--Thông tin các khóa học =================================================================================================================-->
-<section class="_new_course_container" >
-    <div class="course_header">
-        <h3>Khóa học mới dành cho bạn. <span>Mới</span></h3>
-        <span class="new_course_view_all">Xem tất cả.</span>
-    </div>
-</section>
-
-<section class="new_course_container">
-    <!-- Dữ liệu cứng có thể được thay thế sau bằng dữ liệu từ API -->
-</section>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch("http://localhost:8090/product/api/v1/all-course")
-            .then(response => response.json())
-            .then(data => {
-                const nc_container = document.querySelector(".new_course_container");
-                nc_container.innerHTML = ""; // Xóa nội dung cũ nếu có
-
-                if (!Array.isArray(data)) {
-                    console.error("Dữ liệu không hợp lệ:", data);
-                    return;
-                }
-
-                console.log("Khóa học mới:", data.slice(0, 4)); // Debug
-
-                data.slice(0, 4).forEach(course => {
-                    const courseCard = document.createElement("div");
-                    courseCard.className = "course-card new_course";
-
-                    const img = document.createElement("img");
-                    img.src = course.imageUrl || "/Course_img/toeic_course.png";
-                    img.alt = course.courseName || "Khóa học";
-
-                    const contentDiv = document.createElement("div");
-                    contentDiv.className = "course-content";
-
-                    const titleDiv = document.createElement("div");
-                    titleDiv.className = "course-title";
-                    titleDiv.textContent = course.courseName || "Tên khóa học";
-
-                    const descriptionDiv = document.createElement("div");
-                    descriptionDiv.className = "course_description";
-                    descriptionDiv.textContent = course.description || "";
-
-                    const priceDiv = document.createElement("div");
-                    priceDiv.className = "course-price";
-                    priceDiv.textContent = course.price ? course.price + "$" : "Miễn phí";
-                    priceDiv.style.padding = "10px";
-
-                    contentDiv.appendChild(titleDiv);
-                    contentDiv.appendChild(descriptionDiv);
-                    contentDiv.appendChild(priceDiv);
-
-                    courseCard.appendChild(img);
-                    courseCard.appendChild(contentDiv);
-
-                    nc_container.appendChild(courseCard);
-                });
-            })
-            .catch(error => console.error("Lỗi khi tải khóa học mới:", error));
-    });
-</script>
-
-
-
-<!--plugin từ điển dict plugin-->
-
-<style>
-    #dict-toggle-btn {
-        position: fixed;
-        bottom: 250px;
-        right: 10px;
-        background-color: #2f86eb;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 35px;
-        height: 35px;
-        font-size: 20px;
-        cursor: pointer;
-        z-index: 9999;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-    }
-
-    #dict-container {
-        position: fixed;
-        bottom: 20px;
-        right: 70px;
-        display: none;
-        z-index: 9999;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-</style>
-
-<!-- Button kích hoạt từ điển -->
-<button id="dict-toggle-btn">
-    <i class="fa fa-book" aria-hidden="true" style="color: #5a5959;font-size: 16px"></i>
-</button>
-
-<!-- Vị trí container từ điển -->
-<div id="dict-container">
-    <script id="lbdict_plugin_frame" type="text/javascript">
-        !function(){
-            var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
-            function loadScript(t,e){
-                var n=document.createElement("script");
-                n.type="text/javascript";
-                n.readyState?n.onreadystatechange=function(){
-                    ("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())
-                }:n.onload=function(){
-                    e()
-                };
-                n.src=t;
-                q=document.getElementById("lbdict_plugin_frame");
-                q.parentNode.insertBefore(n,q);
-            }
-            setTimeout(function(){
-                loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
-                    lbDictPluginFrame.init(h);
-                })
-            },1000);
-        }();
-    </script>
-</div>
-
-<script>
-    const toggleBtn = document.getElementById('dict-toggle-btn');
-    const dictContainer = document.getElementById('dict-container');
-
-    toggleBtn.addEventListener('click', (e) => {
-        dictContainer.style.display = dictContainer.style.display === 'none' ? 'block' : 'none';
-        e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
-    });
-
-    // Ngăn click trong hộp làm ẩn nó
-    dictContainer.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-
-    // Click ngoài sẽ ẩn hộp từ điển
-    document.addEventListener('click', () => {
-        dictContainer.style.display = 'none';
-    });
-</script>
-
-<!--plugin dictionary-->
 <!--Footer =================================================================================================================================-->
 <footer class="footer_wrapper">
     <div class="footer-column">
@@ -374,6 +177,89 @@
             <img src="icon\instagram.png" alt="instagram">
         </div>
     </div>
+    <!--plugin từ điển-->
+
+    <style>
+        #dict-toggle-btn {
+            position: fixed;
+            bottom: 250px;
+            right: 10px;
+            background-color: #2f86eb;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        #dict-container {
+            position: fixed;
+            bottom: 20px;
+            right: 70px;
+            display: none;
+            z-index: 9999;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+
+    <!-- Button kích hoạt từ điển -->
+    <button id="dict-toggle-btn">
+        <i class="fa fa-book" aria-hidden="true" style="color: #5a5959;font-size: 16px"></i>
+    </button>
+
+    <!-- Vị trí container từ điển -->
+    <div id="dict-container">
+        <script id="lbdict_plugin_frame" type="text/javascript">
+            !function(){
+                var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
+                function loadScript(t,e){
+                    var n=document.createElement("script");
+                    n.type="text/javascript";
+                    n.readyState?n.onreadystatechange=function(){
+                        ("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())
+                    }:n.onload=function(){
+                        e()
+                    };
+                    n.src=t;
+                    q=document.getElementById("lbdict_plugin_frame");
+                    q.parentNode.insertBefore(n,q);
+                }
+                setTimeout(function(){
+                    loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
+                        lbDictPluginFrame.init(h);
+                    })
+                },1000);
+            }();
+        </script>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('dict-toggle-btn');
+        const dictContainer = document.getElementById('dict-container');
+
+        toggleBtn.addEventListener('click', (e) => {
+            dictContainer.style.display = dictContainer.style.display === 'none' ? 'block' : 'none';
+            e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+        });
+
+        // Ngăn click trong hộp làm ẩn nó
+        dictContainer.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Click ngoài sẽ ẩn hộp từ điển
+        document.addEventListener('click', () => {
+            dictContainer.style.display = 'none';
+        });
+    </script>
+
+    <!--plugin dictionary-->
+
 </footer>
 <div class="footer-bottom">©2024 - 2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
 </footer>
