@@ -61,7 +61,7 @@
                             searchResults.appendChild(notFound);
                             return;}
 
-                        data.forEach(course => {
+                        data.slice(0,5).forEach(course => {
                             const div = document.createElement('div');
                             div.className = 'result-item';
                             div.style.color = "black"; // màu chữ
