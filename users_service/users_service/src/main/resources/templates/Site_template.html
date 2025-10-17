@@ -1,0 +1,268 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn tập từ mới</title>
+  <link rel="stylesheet" th:href="@{/css/review_page.css}">
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css}">
+  <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
+</head>
+<body>
+
+<nav class="head_bar" id="head_bar">
+  <a href="/home">
+    <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px; color: rgb(250, 250, 254); position: relative;margin-bottom: 20%;"></i>
+  </a>
+  <a class="Web_subTitle" >ToeiX - Học tiếng Anh ngay! </a>
+  <div class="serch_box">
+    <div class="serch_box_icon">
+      <input class="_input_15ttk_39" id="__serch_box" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+      <div id="search_results"> </div>
+    </div>
+    <script>
+      const searchBox = document.getElementById('__serch_box');
+      const searchResults = document.getElementById('search_results');
+
+      document.addEventListener('click', (event) => {
+        const isClickInsideInput = searchBox.contains(event.target);
+        const isClickInsideResults = searchResults.contains(event.target);
+
+        if (!isClickInsideInput && !isClickInsideResults) {
+          searchBox.value = ''; // xóa nội dung input
+          searchResults.innerHTML = ''; // ẩn kết quả tìm kiếm
+        }
+      });
+
+      searchBox.addEventListener('input', ()=> {
+        const keyword = searchBox.value.trim();
+        if (keyword.length < 1) {
+          searchResults.innerHTML = '';
+          return;
+        }
+        fetch(`http://localhost:8090/product/api/v1/courses/search?keyword=${encodeURIComponent(keyword)}`)
+                .then(response => response.json())
+                .then(data => {
+                  searchResults.innerHTML = '';
+                  searchResults.style.borderRadius= "5px";
+                  searchResults.style.overflow= "hidden";
+                  searchResults.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                  searchResults.style.backgroundColor = "#fff";
+                  searchResults.style.marginTop = "5px";
+
+                  if (data.length === 0) {
+                    const notFound = document.createElement('div');
+                    notFound.textContent = 'Không tìm thấy kết quả cho:' + searchBox.value;
+                    notFound.style.padding = "10px";
+                    notFound.style.color = "red";
+                    notFound.style.textAlign = "center";
+                    notFound.style.cursor = "pointer";
+                    searchResults.appendChild(notFound);
+                    return;}
+
+                  data.forEach(course => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.style.color = "black"; // màu chữ
+                    div.style.backgroundColor = "#e5e7e9"; // màu nền
+                    div.style.padding = "10px"; // khoảng cách trong
+                    div.style.cursor = "pointer";
+                    div.textContent = `${course.courseName} - ${course.courseCode}`;
+                    div.addEventListener("mouseover", () => {
+                      div.style.backgroundColor = "#d5dbdb"; });
+                    div.addEventListener("mouseout", () => {
+                      div.style.backgroundColor = "#e5e7e9"; });
+                    div.addEventListener('click', () => {
+                      alert(`Bạn đã chọn: ${course.courseName}`);
+                      searchBox.value = course.courseName;
+                      searchResults.innerHTML = '';
+                    });
+                    searchResults.appendChild(div);
+                  });
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                });
+      });
+    </script>
+  </div>
+
+  <div class="user_courses" >
+    <div class="user_courses_title"  id="user_courses_title">
+      <p>Khóa khọc của tôi</p>
+      <div id="user-course-container" style="position: absolute; display: none; background-color: #f0f0f0;z-index: 8;overflow: hidden;border-radius: 10px;top: 60px"></div>
+    </div>
+    <i class="fa fa-caret-down" aria-hidden="true"></i>
+  </div>
+
+
+  <div class="noti_box" onclick="toggleNotifications()">
+    <i class="fa-solid fa-bell"></i>
+  </div>
+
+  <div id="notification-list" class="notification-list">
+    <p class="title">Thông báo</p>
+    <div id="notification-container"></div>
+  </div>
+
+  <div class="navBar_">
+    <nav class="user_i4_box">
+      <div class="user_ico" onclick="toggleMenu()">
+        <img th:src="@{/avatar/user_avatar.jpg}" alt="user_avatar" >
+      </div>
+      <div class="user_status"></div>
+    </nav>
+
+    <!-- Hộp thoại thông tin -->
+    <div class="profile-menu" id="profileMenu">
+      <div class="profile-header">
+        <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar" class="profile-pic">
+        <div class="profile-info">
+          <p class="name" id="fullName">Anonymous</p>
+          <p class="username" id="username">Anonymous</p>
+        </div>
+      </div>
+      <hr>
+      <ul>
+        <a href="/personal" style="text-decoration: none"><li>📌 Trang cá nhân</li></a>
+        <li>📝 Viết blog</li>
+        <a href="/vocabulary" style="text-decoration: none"><li>📝 Từ mới mỗi ngày</li></a>
+        <a href="/toeic-test" style="text-decoration: none"><li>📝 Thi Thử Toeic</li></a>
+        <hr>
+        <li>⚙️ Cài đặt</li>
+        <li class="logout" onclick="logOut()">🔓 Đăng xuất</li>
+      </ul>
+    </div>
+    <script th:src="@{/js/review_page_script.js}"></script>
+  </div>
+</nav>
+<!--page content============================================================================================================================-->
+<!--space for word review-->
+<div class="word_review_wrapper wrapper">
+
+</div>
+
+<!--Footer =================================================================================================================================-->
+<footer class="footer_wrapper">
+  <div class="footer-column">
+    <h3>Học Tiếng Anh Để Đi Làm</h3>
+    <p>Điện thoại: 0398756015</p>
+    <p>Email: Dinhdat1012vn@gmail.com</p>
+    <p>Địa chỉ: Số 16, ngõ 257, Thanh Nhàn, Hai Bà Trưng, Hà Nội</p>
+  </div>
+  <div class="footer-column">
+    <h3>Về Chúng Tôi</h3>
+    <a href="#">Giới thiệu</a>
+    <a href="#">Liên hệ</a>
+    <a href="#">Điều khoản</a>
+    <a href="#">Bảo mật</a>
+  </div>
+  <div class="footer-column">
+    <h3>Sản phẩm</h3>
+    <a href="#">Sản Phẩm 1</a>
+    <a href="#">Sản Phẩm 2</a>
+    <a href="#">Sản phẩm 3</a>
+  </div>
+  <div class="footer-column">
+    <h3>Công cụ</h3>
+    <a href="#">sản phẩm 3</a>
+    <a href="#">Sản phẩm 2</a>
+  </div>
+  <div class="footer-column">
+    <h3>Theo dõi chúng tôi.</h3>
+    <div class="footer-social">
+      <img src="icon\ytb_icon.png" alt="YouTube">
+      <img src="icon\fb_icon.png" alt="Facebook">
+      <img src="icon\instagram.png" alt="instagram">
+    </div>
+  </div>
+  <!--plugin từ điển-->
+
+  <style>
+    #dict-toggle-btn {
+      position: fixed;
+      bottom: 250px;
+      right: 10px;
+      background-color: #2f86eb;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    #dict-container {
+      position: fixed;
+      bottom: 20px;
+      right: 70px;
+      display: none;
+      z-index: 9999;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  </style>
+
+  <!-- Button kích hoạt từ điển -->
+  <button id="dict-toggle-btn">
+    <i class="fa fa-book" aria-hidden="true" style="color: #5a5959;font-size: 16px"></i>
+  </button>
+
+  <!-- Vị trí container từ điển -->
+  <div id="dict-container">
+    <script id="lbdict_plugin_frame" type="text/javascript">
+      !function(){
+        var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
+        function loadScript(t,e){
+          var n=document.createElement("script");
+          n.type="text/javascript";
+          n.readyState?n.onreadystatechange=function(){
+            ("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())
+          }:n.onload=function(){
+            e()
+          };
+          n.src=t;
+          q=document.getElementById("lbdict_plugin_frame");
+          q.parentNode.insertBefore(n,q);
+        }
+        setTimeout(function(){
+          loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
+            lbDictPluginFrame.init(h);
+          })
+        },1000);
+      }();
+    </script>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('dict-toggle-btn');
+    const dictContainer = document.getElementById('dict-container');
+
+    toggleBtn.addEventListener('click', (e) => {
+      dictContainer.style.display = dictContainer.style.display === 'none' ? 'block' : 'none';
+      e.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+    });
+
+    // Ngăn click trong hộp làm ẩn nó
+    dictContainer.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    // Click ngoài sẽ ẩn hộp từ điển
+    document.addEventListener('click', () => {
+      dictContainer.style.display = 'none';
+    });
+  </script>
+
+  <!--plugin dictionary-->
+
+</footer>
+<div class="footer-bottom">©2024 - 2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
+</footer>
+</body>
+
+</html>

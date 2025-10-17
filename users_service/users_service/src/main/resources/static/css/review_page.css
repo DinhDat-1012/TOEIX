@@ -307,10 +307,10 @@ hr {
 .wrapper {
     position: relative;
     width: 100vw;
-    height: 75vh;
+    height: 85vh;
     background: #fff;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    margin-top: 60px;
+    margin-top: 30px;
     margin-bottom: 1px;
 }
 

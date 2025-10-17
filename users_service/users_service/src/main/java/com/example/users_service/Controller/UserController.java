@@ -36,6 +36,10 @@ public class UserController {
     public String showReviewPage(Model model) {
         return "review_page"; // Trả về tên file Thymeleaf trong templates
     }
+    @GetMapping("/vocabulary")
+    public String showVocabularyPage(Model model) {
+        return "vocabulary"; // Trả về tên file Thymeleaf trong templates
+    }
     @GetMapping("/test-personal")
     public String showPersonalPage(@RequestHeader String username,@RequestHeader String token ,Model model) {
 
@@ -60,4 +64,8 @@ public class UserController {
         return "home_page";
     }
 
+    @GetMapping(path = "/toeic-test")
+    public String toeic_test(Model model) {
+        return "Toeic_exam";
+    }
 }
