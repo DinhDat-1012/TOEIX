@@ -18,9 +18,10 @@ public class User {
     private String email;
     @Column(unique = true, nullable = false)
     private String username;
-
     @Column(nullable = false)
     private String password;
+    @Column(nullable = true)
+    private String Hash_one_time_passcode;
     @Column(nullable = false)
     private String roles;
 }

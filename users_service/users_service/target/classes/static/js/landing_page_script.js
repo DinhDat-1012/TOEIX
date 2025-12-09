@@ -1,211 +1,341 @@
-//Các hàm thực hiện thao tác với form đăng nhập và đăng ký tài khoản.===================================================================================================
-//loginform
+// Quản lý hiển thị forms
+const FormManager = {
+    forms: {
+        login: null,
+        register: null,
+        resetPassword: null
+    },
 
+    init() {
+        this.forms.login = document.querySelector(".login_form_wrapper");
+        this.forms.register = document.querySelector(".register_form_wrapper");
+        this.forms.resetPassword = document.querySelector(".reset_pw_form_wrapper");
+    },
+
+    hideAll() {
+        Object.values(this.forms).forEach(form => {
+            if (form) form.style.display = "none";
+        });
+    },
+
+    show(formType) {
+        this.hideAll();
+        if (this.forms[formType]) {
+            this.forms[formType].style.display = "block";
+        }
+    },
+
+    toggle(formType) {
+        if (this.forms[formType]) {
+            const isVisible = this.forms[formType].style.display === "block";
+            this.hideAll();
+            if (!isVisible) {
+                this.forms[formType].style.display = "block";
+            }
+        }
+    }
+};
+
+// Validation helpers
+const Validator = {
+    isValidEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    },
+
+    isValidPassword(password) {
+        return password && password.length >= 6;
+    },
+
+    passwordsMatch(password, confirmPassword) {
+        return password === confirmPassword;
+    }
+};
+
+// API Service
+const AuthService = {
+    async register(userData) {
+        const response = await fetch("http://localhost:8080/users/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Đăng ký thất bại!");
+        }
+
+        return result;
+    },
+
+    async login(credentials) {
+        const response = await fetch("http://localhost:8000/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Đăng nhập thất bại!");
+        }
+
+        return result;
+    }
+};
+
+// Storage Manager (sử dụng state thay vì localStorage)
+const StorageManager = {
+    state: {
+        authToken: null,
+        userName: null
+    },
+
+    setToken(token) {
+        this.state.authToken = token;
+    },
+
+    setUserName(userName) {
+        this.state.userName = userName;
+    },
+
+    getToken() {
+        return this.state.authToken;
+    },
+
+    getUserName() {
+        return this.state.userName;
+    },
+
+    clear() {
+        this.state.authToken = null;
+        this.state.userName = null;
+    }
+};
+
+// Form handlers
 function openLoginform() {
-    let loginForm = document.querySelector(".login_form_wrapper");
-    let login_button_dplay = loginForm.style.display;
-
-    if (login_button_dplay == "none") {
-        loginForm.style.display = "block";
-    } else {
-        loginForm.style.display = "none";
-    }
-}
-function signInButton_Click(){
-    //thực hiện thao tác kiểm tra dữ liệu đầu vào.
-    //Các thao tác cần thiết khi đăng nhập.
-
+    FormManager.toggle('login');
 }
 
-function openLoginformToSignIn(){
-    let regis_form = document.querySelector(".register_form_wrapper");
-    let login_form = document.querySelector(".login_form_wrapper");
-
-    regis_form.style.display = "none";
-    login_form.style.display = "block";
-}
-document.addEventListener("click", function (event) {
-    var loginForm = document.querySelector(".login_form_wrapper");
-    var loginButton = document.querySelector(".login_button");
-    var registerTextInRegisterForm = document.querySelector(".openLoginForm")
-    if (!loginForm.contains(event.target) && !loginButton.contains(event.target)&&!registerTextInRegisterForm.contains(event.target)) {
-        loginForm.style.display = "none";
-    }
-});
-//register form_________________________________________________________________________________________________________________________________________________________
-function openRegisterform(){
-    let regis_form = document.querySelector(".register_form_wrapper");
-
-    if (regis_form.style.display == "none") {
-        regis_form.style.display = "block";
-    } else {
-        regis_form.style.display = "none";
-    }
+function openRegisterform() {
+    FormManager.toggle('register');
 }
 
+function openLoginformToSignIn() {
+    FormManager.show('login');
+}
 
 function openRegisterFormToCreateAccount() {
-
-
-    let regis_form = document.querySelector(".register_form_wrapper");
-    let login_form = document.querySelector(".login_form_wrapper");
-
-    regis_form.style.display = "block";
-    login_form.style.display = "none";
+    FormManager.show('register');
 }
 
-//Thực hiện thao tác đăng ký tài khoản================================
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("registerForm").addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const username = document.getElementById("register_user_name").value;
-        const password = document.getElementById("register_password").value;
-        const password_repeat = document.getElementById("register_password_repeat").value;
-        const email = document.getElementById("register_email").value;
-        //kiểm tra định dạng email
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if(regex.test(email)){
-            if(password == password_repeat){
-
-                const gender = true;
-                const fullName = "anonymous";
-                const role = "USER";
-                const address = "anonymous";
-                const birthday = "2000-01-01"
-
-                const requestData = {
-                    username,
-                    password,
-                    email,
-                    fullName,
-                    gender,
-                    birthday,
-                    address,
-                    role
-                };
-                alert(requestData.email+"|"+requestData.username);
-                try {
-                    const response = await fetch("http://localhost:8080/users/register", {
-                        method: "Post",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(requestData),
-                    });
-
-                    const result = await response.json();
-
-                    if (response.ok) {
-                        alert("Đăng ký thành công!  đăng nhập...");
-                        let regis_form = document.querySelector(".register_form_wrapper");
-                        let login_form = document.querySelector(".login_form_wrapper");
-
-                        regis_form.style.display = "none";
-                        login_form.style.display = "block";
-
-                        document.getElementById("register_user_name").value = "";
-                        document.getElementById("register_password").value = "";
-                        document.getElementById("register_password_repeat").value = "";
-                        document.getElementById("register_email").value ="";
-                    } else {
-                        alert("Đăng ký thất bại: " + (result.message || "Có lỗi xảy ra!"));
-                    }
-                } catch (error) {
-                    console.error("Lỗi:", error);
-                    alert("Không thể kết nối đến máy chủ!");
-                }
-            }else{
-
-                alert("Nhập lại mật khẩu không chính xác!");
-
-            }}else{
-            alert("địa chỉ email không tồn tại!")
-        }
-    });
-
-});
-
-
-
-function signUpButtonClick(){
-    //Thao tác kiểm tra dữ liệu đầu vào
-    //Thao tác đăng nhập.
+function openResetPasswordFormToCreateAccount() {
+    FormManager.show('resetPassword');
 }
 
-document.addEventListener("click", function (event) {
-    var regis_form = document.querySelector(".register_form_wrapper");
-    var regis_btn  = document.querySelector(".register_button");
-    var signUpTextInLogInform = document.querySelector(".openRegisterForm");
+// Xử lý đăng ký
+async function handleRegister(event) {
+    event.preventDefault();
 
-    if (!regis_form.contains(event.target) && !regis_btn.contains(event.target)) {
-        if(!signUpTextInLogInform.contains(event.target)){
-            regis_form.style.display = "none";
+    const username = document.getElementById("register_user_name").value.trim();
+    const password = document.getElementById("register_password").value;
+    const passwordRepeat = document.getElementById("register_password_repeat").value;
+    const email = document.getElementById("register_email").value.trim();
+
+    // Validation
+    if (!Validator.isValidEmail(email)) {
+        alert("Địa chỉ email không hợp lệ!");
+        return;
+    }
+
+    if (!Validator.isValidPassword(password)) {
+        alert("Mật khẩu phải có ít nhất 6 ký tự!");
+        return;
+    }
+
+    if (!Validator.passwordsMatch(password, passwordRepeat)) {
+        alert("Mật khẩu nhập lại không khớp!");
+        return;
+    }
+
+    const requestData = {
+        username,
+        password,
+        email,
+        fullName: "anonymous",
+        gender: true,
+        birthday: "2000-01-01",
+        address: "anonymous",
+        role: "USER"
+    };
+
+    try {
+        await AuthService.register(requestData);
+        alert("Đăng ký thành công! Vui lòng đăng nhập.");
+
+        // Reset form
+        document.getElementById("registerForm").reset();
+
+        // Chuyển sang form đăng nhập
+        FormManager.show('login');
+    } catch (error) {
+        console.error("Lỗi đăng ký:", error);
+        alert(error.message || "Không thể kết nối đến máy chủ!");
+    }
+}
+
+// Xử lý đăng nhập
+async function handleLogin(event) {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!username || !password) {
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+    }
+
+    const requestData = { username, password };
+
+    try {
+        const result = await AuthService.login(requestData);
+
+        // Lưu token và username
+        StorageManager.setToken(result.token);
+        StorageManager.setUserName(username);
+
+        alert("Đăng nhập thành công!");
+
+        // Ẩn form
+        FormManager.hideAll();
+
+        // Chuyển hướng
+        window.location.href = 'http://localhost:8080/personal';
+    } catch (error) {
+        console.error("Lỗi đăng nhập:", error);
+        alert(error.message || "Không thể kết nối đến máy chủ!");
+    }
+}
+
+// Xử lý click bên ngoài form để đóng
+function handleOutsideClick(event) {
+    const loginForm = FormManager.forms.login;
+    const registerForm = FormManager.forms.register;
+    const loginButton = document.querySelector(".login_button");
+    const registerButton = document.querySelector(".register_button");
+    const openLoginFormLink = document.querySelector(".openLoginForm");
+    const openRegisterFormLink = document.querySelector(".openRegisterForm");
+
+    // Đóng login form nếu click bên ngoài
+    if (loginForm && loginForm.style.display === "block") {
+        if (!loginForm.contains(event.target) &&
+            !loginButton?.contains(event.target) &&
+            !openLoginFormLink?.contains(event.target)) {
+            loginForm.style.display = "none";
         }
     }
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("login_form").addEventListener("submit", async function (event) {
-        event.preventDefault();
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const requestData = {
-            username,
-            password
-        };
-        alert(requestData.username +"|"+requestData.username);
-        try {
-            const response = await fetch("http://localhost:8000/auth/login", {
-                method: "Post",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestData),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                let login_form = document.querySelector(".login_form_wrapper");
-                localStorage.setItem("authToken", result.token);//lưu token vào bộ nhớ.
-                localStorage.setItem("userName",username);
-                alert("Đăng nhập thành công, token: "+ result.token + " username:"+username);
-
-                alert("token đã được lưu vào bô nhớ: " + localStorage.getItem("authToken"));//lấy token từ bộ nhớ.
-                alert("username: "+ localStorage.getItem("userName"))
-                login_form.style.display = "none";
-
-                window.location.href = 'http://localhost:8080/personal';
-            } else {
-                alert("Đăng nhập thất bại: " + (result.message || "Có lỗi xảy ra!"));
-            }
-        } catch (error) {
-            console.error("Lỗi:", error);
-            alert("Không thể kết nối đến máy chủ!");
+    // Đóng register form nếu click bên ngoài
+    if (registerForm && registerForm.style.display === "block") {
+        if (!registerForm.contains(event.target) &&
+            !registerButton?.contains(event.target) &&
+            !openRegisterFormLink?.contains(event.target)) {
+            registerForm.style.display = "none";
         }
-    });
+    }
+}
 
-});
-
-
-
-
-//Các hàm thực hiện thao tác với giao diện người dùng:==================================================================================================================
-//Hiển thị slide banner.
-
+// Slide banner
 let slideIndex = 0;
 function showSlides() {
-    let slides = document.getElementsByClassName("slides");
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) { slideIndex = 1; }
-    slides[slideIndex - 1].style.display = "block";
-    slides[slideIndex - 1].classList.add("fade");
+    const slides = document.getElementsByClassName("slides");
+
+    if (slides.length === 0) return;
+
+    // Ẩn tất cả slides
+    Array.from(slides).forEach(slide => {
+        slide.style.display = "none";
+        slide.classList.remove("fade");
+    });
+
+    // Hiển thị slide tiếp theo
+    slideIndex = (slideIndex + 1) % slides.length;
+    slides[slideIndex].style.display = "block";
+    slides[slideIndex].classList.add("fade");
+
     setTimeout(showSlides, 6000);
 }
 
-document.addEventListener("DOMContentLoaded", showSlides);
+// Khởi tạo khi DOM loaded
+document.addEventListener("DOMContentLoaded", function () {
+    // Khởi tạo Form Manager
+    FormManager.init();
+
+    // Gắn sự kiện đăng ký
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.addEventListener("submit", handleRegister);
+    }
+
+    // Gắn sự kiện đăng nhập
+    const loginForm = document.getElementById("login_form");
+    if (loginForm) {
+        loginForm.addEventListener("submit", handleLogin);
+    }
+
+    // Xử lý click bên ngoài
+    document.addEventListener("click", handleOutsideClick);
+
+    // Khởi động slideshow
+    showSlides();
+});
+function reset_password() {
+
+}
+
+async function get_OTP() {
+    const btn = document.querySelector(".get_otp_button");
+    const emailInput = document.querySelector("#_user_email");
+    const email = emailInput.value.trim();
+
+    if (!email) {
+        alert("Vui lòng nhập email trước khi nhận OTP!");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Đang gửi...";
+
+    try {
+        // Gửi email qua query string, bỏ body
+        const response = await fetch(
+            "http://localhost:8000/auth/send-otp?email=" + encodeURIComponent(email),
+            { method: "GET" } // chỉ cần GET, bỏ body
+        );
+
+        if (!response.ok) {
+            throw new Error("Gửi OTP thất bại");
+        }
+
+        const result = await response.json();
+
+        btn.textContent = "Đã gửi mã OTP, gửi lại?";
+        btn.disabled = false;
+
+        console.log("OTP sent:", result);
+    } catch (error) {
+        console.error(error);
+        btn.textContent = "Nhận mã OTP.";
+        btn.disabled = false;
+        alert("Không thể gửi OTP. Vui lòng thử lại.");
+    }
+}

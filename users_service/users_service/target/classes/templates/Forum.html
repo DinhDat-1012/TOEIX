@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diễn đàn</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" th:href="@{/css/home_page.css}">
+  <link rel="stylesheet" th:href="@{/css/Forum.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
+
+  <!-- JS -->
+  <script th:src="@{/js/forum_page.js}" defer></script>
+  <script th:src="@{/js/review_page_script.js}" defer></script>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f0f2f5;
+  }
+
+  .container {
+    max-width: 1600px;
+    margin: 0px 20px 0px 20px;
+  }
+
+  .forum-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .forum-header h3 {
+    font-size: 24px;
+    color: #333;
+  }
+
+  .forum-posts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+
+  .forum-post-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .forum-post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+  }
+
+  .post-user-info {
+    flex: 1;
+  }
+
+  .post-username {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .post-time {
+    color: #888;
+    font-size: 12px;
+  }
+
+  .post-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .post-content {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+
+  .post-tag {
+    background: #f0f0f0;
+    color: #666;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+
+  .post-stats {
+    display: flex;
+    gap: 20px;
+    color: #888;
+    font-size: 13px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .post-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .post-stat:hover {
+    color: #667eea;
+  }
+
+  .post-stat i {
+    color: #667eea;
+  }
+
+  /* Modal Styles */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Thay thế CSS của modal-overlay và modal-container trong file gốc */
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto; /* CHO PHÉP CUỘN */
+    padding: 20px 0; /* THÊM PADDING */
+  }
+
+  .modal-overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* THAY ĐỔI TỪ center THÀNH flex-start */
+    padding-top: 40px; /* THÊM PADDING TOP */
+  }
+
+  .modal-container {
+    background: white;
+    border-radius: 16px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 20px 40px 40px 40px; /* THÊM MARGIN BOTTOM */
+    display: flex;
+    flex-direction: column;
+    max-height: none; /* XÓA MAX-HEIGHT CỐ ĐỊNH */
+    animation: slideUp 0.3s ease;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header {
+    padding: 20px;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 0; /* THÊM TOP */
+    background: white; /* ĐẢM BẢO NỀN TRẮNG */
+    z-index: 10; /* ĐẢM BẢO Ở TRÊN */
+    border-radius: 16px 16px 0 0; /* GIỮ BO GÓC */
+  }
+
+  .modal-content {
+    padding: 40px;
+    min-width: 1200px;
+    overflow-y: visible; /* THAY ĐỔI TỪ auto THÀNH visible */
+    overflow-x: hidden;
+  }
+
+  /* Đảm bảo comment input không bị ẩn */
+  .comment-input-container {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Cải thiện scrollbar cho modal-overlay */
+  .modal-overlay::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .modal-overlay::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+  }
+
+  .modal-overlay::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 5px;
+  }
+
+  .modal-overlay::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .modal-overlay {
+      padding: 0;
+    }
+
+    .modal-overlay.active {
+      padding-top: 0;
+    }
+
+    .modal-container {
+      max-height: none;
+      border-radius: 0;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .modal-header {
+      border-radius: 0;
+    }
+
+    .modal-content {
+      padding: 20px;
+    }
+  }
+
+  .modal-post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .modal-post-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .modal-post-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.4;
+  }
+
+  .modal-post-content {
+    color: #333;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .modal-post-actions {
+    display: flex;
+    gap: 20px;
+    padding: 15px 0;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 25px;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .action-btn:hover {
+    background: #f0f0f0;
+    color: #667eea;
+  }
+
+  .action-btn.active {
+    color: #667eea;
+  }
+
+  .action-btn i {
+    font-size: 16px;
+  }
+
+  .comments-section {
+    margin-top: 20px;
+  }
+
+  .comments-header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .comment-input-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .comment-input-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .comment-input-wrapper {
+    flex: 1;
+  }
+
+  .comment-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    transition: all 0.2s;
+  }
+
+  .comment-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .comment-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .comment-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .comment-btn-cancel {
+    background: #f0f0f0;
+    color: #666;
+  }
+
+  .comment-btn-cancel:hover {
+    background: #e0e0e0;
+  }
+
+  .comment-btn-submit {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+  }
+
+  .comment-btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  }
+
+  .comment-btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .comment-item {
+    display: flex;
+    gap: 12px;
+  }
+
+  .comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .comment-content-wrapper {
+    flex: 1;
+  }
+
+  .comment-bubble {
+    background: #f0f2f5;
+    padding: 12px 16px;
+    border-radius: 18px;
+    margin-bottom: 5px;
+  }
+
+  .comment-username {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .comment-text {
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .comment-meta {
+    display: flex;
+    gap: 15px;
+    padding-left: 16px;
+    color: #888;
+    font-size: 12px;
+  }
+
+  .comment-action {
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .comment-action:hover {
+    color: #667eea;
+  }
+
+  .no-comments {
+    text-align: center;
+    color: #888;
+    padding: 40px 20px;
+    font-size: 14px;
+  }
+
+  /* Scrollbar */
+  .modal-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  @media (max-width: 768px) {
+    .modal-container {
+      max-height: 100vh;
+      border-radius: 0;
+    }
+
+    .forum-posts-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<nav class="head_bar" id="head_bar">
+  <a href="/home">
+    <i class="fa fa-home" style="font-size: 25px; color: #fff; margin-right: 10px;"></i>
+  </a>
+  <a class="Web_subTitle">ToeiX - Học tiếng Anh ngay!</a>
+
+  <!-- Search Box -->
+  <div class="serch_box">
+    <input class="_input_15ttk_39" id="__serch_box" placeholder="Tìm kiếm khóa học, bài viết..." spellcheck="false">
+    <div id="search_results"></div>
+  </div>
+
+  <!-- My Courses -->
+  <div class="user_courses">
+    <div class="user_courses_title" id="user_courses_title">
+      <p>Khóa học của tôi</p>
+      <div id="user-course-container" style="display: none; position: absolute; top: 60px; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; width: 200px;">
+        <!-- JS sẽ thêm khóa học -->
+      </div>
+    </div>
+    <i class="fa fa-caret-down"></i>
+  </div>
+
+  <!-- Notification -->
+  <div class="noti_box" onclick="toggleNotifications()">
+    <i class="fa-solid fa-bell"></i>
+  </div>
+  <div id="notification-list" class="notification-list" style="display: none;">
+    <p class="title">Thông báo</p>
+    <div id="notification-container"></div>
+  </div>
+
+  <!-- User Avatar -->
+  <div class="user_i4_box">
+    <div class="user_ico" onclick="toggleMenu()">
+      <img th:src="@{/avatar/user_avatar.jpg}" alt="avatar">
+    </div>
+    <div class="user_status"></div>
+  </div>
+
+  <!-- Profile Menu -->
+  <div class="profile-menu" id="profileMenu" style="display: none;">
+    <div class="profile-header">
+      <img th:src="@{/avatar/user_avatar.jpg}" class="profile-pic" alt="avatar">
+      <div class="profile-info">
+        <p class="name" id="fullName">Nguyễn Văn A</p>
+        <p class="username" id="username">@nguyenvana</p>
+      </div>
+    </div>
+    <hr>
+    <ul>
+      <a href="/personal" style="text-decoration: none"><li>Trang cá nhân</li></a>
+      <li>Viết blog</li>
+      <a href="/vocabulary" style="text-decoration: none"><li>Từ mới mỗi ngày</li></a>
+      <a href="/toeic-test" style="text-decoration: none"><li>Thi Thử TOEIC</li></a>
+      <hr>
+      <li>Cài đặt</li>
+      <li class="logout" onclick="logOut()">Đăng xuất</li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ==================== FORUM CONTENT ==================== -->
+<div class="forum-container">
+  <!-- Sidebar -->
+  <div class="container">
+    <div class="forum-header">
+      <h3>Diễn đàn học tập 🔥</h3>
+    </div>
+
+    <div class="forum-posts-container" id="forumPostsContainer">
+      <!-- Bài viết sẽ được load ở đây -->
+    </div>
+  </div>
+
+  <!-- Modal Chi tiết bài viết -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Chi tiết bài viết</h3>
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-content" id="modalContent">
+        <!-- Nội dung chi tiết bài viết sẽ được load ở đây -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dữ liệu mẫu
+    const samplePosts = [
+      {
+        id: 1,
+        username: "Nguyễn Văn A",
+        createdAt: new Date(Date.now() - 3600000).toISOString(),
+        title: "Chia sẻ kinh nghiệm học TOEIC 900+",
+        content: "Xin chào mọi người! Mình vừa thi được 920 điểm TOEIC sau 3 tháng học tập chăm chỉ. Mình muốn chia sẻ một số tips và kinh nghiệm cho các bạn đang chuẩn bị thi.\n\n1. Luyện nghe mỗi ngày ít nhất 1 tiếng\n2. Học từ vựng theo chủ đề\n3. Làm đề thử nghiệm thường xuyên\n4. Phân tích lỗi sai để cải thiện\n\nHy vọng chia sẻ của mình sẽ giúp ích cho các bạn!",
+        tags: ["TOEIC", "Kinh nghiệm", "Tips"],
+        views: 245,
+        comments: 18,
+        likes: 67,
+        liked: false
+      },
+      {
+        id: 2,
+        username: "Trần Thị B",
+        createdAt: new Date(Date.now() - 7200000).toISOString(),
+        title: "Tài liệu luyện Speaking hiệu quả",
+        content: "Mình đã tổng hợp một số tài liệu và phương pháp luyện Speaking rất hiệu quả. Các bạn có thể tham khảo:\n\n- Shadowing với podcast tiếng Anh\n- Ghi âm và tự đánh giá\n- Tham gia câu lạc bộ tiếng Anh\n- Luyện tập với ứng dụng AI\n\nCác bạn có thể chia sẻ thêm phương pháp của mình nhé!",
+        tags: ["Speaking", "Tài liệu", "Phương pháp"],
+        views: 189,
+        comments: 12,
+        likes: 45,
+        liked: false
+      },
+      {
+        id: 3,
+        username: "Lê Văn C",
+        createdAt: new Date(Date.now() - 86400000).toISOString(),
+        title: "Cách học từ vựng không bao giờ quên",
+        content: "Sau nhiều năm học tiếng Anh, mình đã tìm ra được phương pháp học từ vựng hiệu quả nhất:\n\n1. Học từ trong ngữ cảnh\n2. Sử dụng flashcard với hệ thống lặp lại ngắt quãng\n3. Viết câu ví dụ của riêng mình\n4. Áp dụng từ mới trong giao tiếp hàng ngày\n5. Ôn tập đều đặn\n\nPhương pháp này đã giúp mình nhớ từ lâu hơn rất nhiều!",
+        tags: ["Từ vựng", "Phương pháp", "Học tập"],
+        views: 567,
+        comments: 34,
+        likes: 123,
+        liked: false
+      },
+      {
+        id: 4,
+        username: "Phạm Thị D",
+        createdAt: new Date(Date.now() - 172800000).toISOString(),
+        title: "Lộ trình học IELTS từ 0 lên 7.5",
+        content: "Mình đã hoàn thành lộ trình học IELTS từ 0 lên 7.5 sau 6 tháng. Đây là lộ trình chi tiết:\n\nTháng 1-2: Học nền tảng grammar và từ vựng cơ bản\nTháng 3-4: Luyện 4 kỹ năng cơ bản\nTháng 5-6: Luyện đề và hoàn thiện kỹ năng\n\nMình sẽ chia sẻ chi tiết hơn trong các bài viết tiếp theo!",
+        tags: ["IELTS", "Lộ trình", "Học tập"],
+        views: 432,
+        comments: 28,
+        likes: 89,
+        liked: false
+      }
+    ];
+
+    // Dữ liệu bình luận mẫu
+    const sampleComments = {
+      1: [
+        { id: 1, username: "Hoàng Văn E", text: "Cảm ơn bạn đã chia sẻ! Rất hữu ích cho mình.", time: "2 giờ trước" },
+        { id: 2, username: "Vũ Thị F", text: "Mình cũng đang chuẩn bị thi TOEIC, bạn có thể chia sẻ thêm về phần Reading được không?", time: "1 giờ trước" },
+        { id: 3, username: "Đặng Văn G", text: "920 điểm thật tuyệt vời! Chúc mừng bạn nhé!", time: "30 phút trước" }
+      ],
+      2: [
+        { id: 1, username: "Bùi Thị H", text: "Mình rất thích phương pháp Shadowing, nó giúp mình cải thiện phát âm rất nhiều!", time: "3 giờ trước" },
+        { id: 2, username: "Ngô Văn I", text: "Bạn có thể gợi ý một số podcast hay không?", time: "2 giờ trước" }
+      ],
+      3: [
+        { id: 1, username: "Phan Thị J", text: "Flashcard thực sự hiệu quả! Mình đang dùng Anki.", time: "1 ngày trước" },
+        { id: 2, username: "Trương Văn K", text: "Cảm ơn bạn đã chia sẻ phương pháp hay!", time: "20 giờ trước" }
+      ],
+      4: [
+        { id: 1, username: "Lý Thị L", text: "Lộ trình rất chi tiết! Mình sẽ theo dõi.", time: "2 ngày trước" },
+        { id: 2, username: "Võ Văn M", text: "6 tháng lên 7.5 thật ấn tượng!", time: "1 ngày trước" }
+      ]
+    };
+
+    // Format thời gian
+    function formatTime(dateString) {
+      const now = new Date();
+      const postDate = new Date(dateString);
+      const diffMs = now - postDate;
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
+
+      if (diffMins < 1) return 'Vừa xong';
+      if (diffMins < 60) return `${diffMins} phút trước`;
+      if (diffHours < 24) return `${diffHours} giờ trước`;
+      if (diffDays < 7) return `${diffDays} ngày trước`;
+
+      return postDate.toLocaleDateString('vi-VN');
+    }
+
+    // Load bài viết
+    function loadPosts() {
+      const container = document.getElementById("forumPostsContainer");
+      container.innerHTML = "";
+
+      samplePosts.forEach(post => {
+        const postCard = document.createElement("div");
+        postCard.className = "forum-post-card";
+        postCard.onclick = () => openModal(post.id);
+
+        const initial = post.username.charAt(0).toUpperCase();
+
+        postCard.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-avatar">${initial}</div>
+                        <div class="post-user-info">
+                            <div class="post-username">${post.username}</div>
+                            <div class="post-time">${formatTime(post.createdAt)}</div>
+                        </div>
+                    </div>
+                    <div class="post-title">${post.title}</div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-tags">
+                        ${post.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>${post.views}</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fa-solid fa-comment"></i>
+                            <span>${post.comments}</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>${post.likes}</span>
+                        </div>
+                    </div>
+                `;
+
+        container.appendChild(postCard);
+      });
+    }
+
+    // Mở modal
+    function openModal(postId) {
+      const post = samplePosts.find(p => p.id === postId);
+      if (!post) return;
+
+      const modal = document.getElementById('postModal');
+      const modalContent = document.getElementById('modalContent');
+      const initial = post.username.charAt(0).toUpperCase();
+      const comments = sampleComments[postId] || [];
+
+      modalContent.innerHTML = `
+                <div class="modal-post-header">
+                    <div class="modal-post-avatar">${initial}</div>
+                    <div class="post-user-info">
+                        <div class="post-username">${post.username}</div>
+                        <div class="post-time">${formatTime(post.createdAt)}</div>
+                    </div>
+                </div>
+                <div class="modal-post-title">${post.title}</div>
+                <div class="modal-post-content">${post.content.replace(/\n/g, '<br>')}</div>
+                <div class="post-tags">
+                    ${post.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('')}
+                </div>
+                <div class="modal-post-actions">
+                    <button class="action-btn ${post.liked ? 'active' : ''}" onclick="toggleLike(${post.id})">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>${post.likes} Thích</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fa-solid fa-comment"></i>
+                        <span>${post.comments} Bình luận</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Chia sẻ</span>
+                    </button>
+                </div>
+
+                <div class="comments-section">
+                    <div class="comments-header">Bình luận (${comments.length})</div>
+
+                    <div class="comment-input-container">
+                        <div class="comment-input-avatar">U</div>
+                        <div class="comment-input-wrapper">
+                            <textarea
+                                class="comment-input"
+                                id="commentInput"
+                                placeholder="Viết bình luận..."
+                                rows="1"
+                                oninput="autoResize(this)"
+                            ></textarea>
+                            <div class="comment-actions" style="display: none;" id="commentActions">
+                                <button class="comment-btn comment-btn-cancel" onclick="cancelComment()">Hủy</button>
+                                <button class="comment-btn comment-btn-submit" onclick="submitComment(${post.id})" disabled id="submitBtn">Đăng</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="comments-list">
+                        ${comments.length > 0 ? comments.map(comment => {
+        const commentInitial = comment.username.charAt(0).toUpperCase();
+        return `
+                                <div class="comment-item">
+                                    <div class="comment-avatar">${commentInitial}</div>
+                                    <div class="comment-content-wrapper">
+                                        <div class="comment-bubble">
+                                            <div class="comment-username">${comment.username}</div>
+                                            <div class="comment-text">${comment.text}</div>
+                                        </div>
+                                        <div class="comment-meta">
+                                            <span>${comment.time}</span>
+                                            <span class="comment-action">Thích</span>
+                                            <span class="comment-action">Trả lời</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+      }).join('') : '<div class="no-comments">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</div>'}
+                    </div>
+                </div>
+            `;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      // Setup comment input listeners
+      setupCommentInput();
+    }
+
+    // Đóng modal
+    function closeModal() {
+      const modal = document.getElementById('postModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Click outside modal để đóng
+    document.getElementById('postModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+
+    // Toggle like
+    function toggleLike(postId) {
+      const post = samplePosts.find(p => p.id === postId);
+      if (post) {
+        post.liked = !post.liked;
+        post.likes += post.liked ? 1 : -1;
+        openModal(postId); // Refresh modal
+        loadPosts(); // Refresh list
+      }
+    }
+
+    // Auto resize textarea
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Setup comment input
+    function setupCommentInput() {
+      const input = document.getElementById('commentInput');
+      const actions = document.getElementById('commentActions');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!input) return;
+
+      input.addEventListener('focus', () => {
+        actions.style.display = 'flex';
+      });
+
+      input.addEventListener('input', () => {
+        submitBtn.disabled = input.value.trim().length === 0;
+      });
+    }
+
+    // Cancel comment
+    function cancelComment() {
+      const input = document.getElementById('commentInput');
+      const actions = document.getElementById('commentActions');
+      input.value = '';
+      input.style.height = 'auto';
+      actions.style.display = 'none';
+    }
+
+    // Submit comment
+    function submitComment(postId) {
+      const input = document.getElementById('commentInput');
+      const text = input.value.trim();
+
+      if (text.length === 0) return;
+
+      // Add comment to data
+      if (!sampleComments[postId]) {
+        sampleComments[postId] = [];
+      }
+
+      const newComment = {
+        id: Date.now(),
+        username: "User (Bạn)",
+        text: text,
+        time: "Vừa xong"
+      };
+
+      sampleComments[postId].unshift(newComment);
+
+      // Update post comment count
+      const post = samplePosts.find(p => p.id === postId);
+      if (post) {
+        post.comments++;
+      }
+
+      // Refresh modal and list
+      openModal(postId);
+      loadPosts();
+    }
+
+    // ESC key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Load posts on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      loadPosts();
+    });
+  </script>
+      <!-- Thêm 2 bài nữa nếu cần... -->
+    </div>
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="page-btn" id="prevPage" disabled>Trước</button>
+      <div class="page-numbers">
+        <button class="page-number active">1</button>
+        <button class="page-number">2</button>
+      </div>
+      <button class="page-btn" id="nextPage">Tiếp</button>
+    </div>
+  </main>
+</div>
+
+<!-- ==================== MODAL TẠO BÀI ==================== -->
+<div class="modal" id="createPostModal" style="display: none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Tạo bài viết mới</h2>
+      <span class="close-modal" onclick="closeCreatePostModal()">×</span>
+    </div>
+    <div class="modal-body">
+      <form id="createPostForm">
+        <div class="form-group">
+          <label>Tiêu đề</label>
+          <input type="text" id="postTitle" placeholder="Nhập tiêu đề..." required>
+        </div>
+        <div class="form-group">
+          <label>Danh mục</label>
+          <select id="postCategory" required>
+            <option value="">Chọn danh mục</option>
+            <option value="toeic">TOEIC</option>
+            <option value="ielts">IELTS</option>
+            <option value="grammar">Grammar</option>
+            <option value="vocabulary">Từ vựng</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nội dung</label>
+          <textarea id="postContent" rows="6" placeholder="Nhập nội dung..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Thẻ</label>
+          <input type="text" id="postTags" placeholder="TOEIC, Tips, ...">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closeCreatePostModal()">Hủy</button>
+          <button type="submit" class="btn-submit">Đăng bài</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TỪ ĐIỂN LABAN ==================== -->
+<button id="dict-toggle-btn">
+  <i class="fa fa-book"></i>
+</button>
+<div id="dict-container">
+  <script>
+    !function(){
+      var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
+      function loadScript(t,e){
+        var n=document.createElement("script");
+        n.type="text/javascript";
+        n.onload=e;
+        n.src=t;
+        document.head.appendChild(n);
+      }
+      setTimeout(function(){
+        loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
+          lbDictPluginFrame.init(h);
+        })
+      },1000);
+    }();
+  </script>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<!--Footer =================================================================================================================================-->
+<footer class="footer_wrapper">
+  <div class="footer-column">
+    <h3>Học Tiếng Anh Để Đi Làm</h3>
+    <p>Điện thoại: 0398756015</p>
+    <p>Email: Dinhdat1012vn@gmail.com</p>
+    <p>Địa chỉ: Số 16, ngõ 257, Thanh Nhàn, Hai Bà Trưng, Hà Nội</p>
+  </div>
+  <div class="footer-column">
+    <h3>Về Chúng Tôi</h3>
+    <a href="#">Giới thiệu</a>
+    <a href="#">Liên hệ</a>
+    <a href="#">Điều khoản</a>
+    <a href="#">Bảo mật</a>
+  </div>
+  <div class="footer-column">
+    <h3>Sản phẩm</h3>
+    <a href="#">Sản Phẩm 1</a>
+    <a href="#">Sản Phẩm 2</a>
+    <a href="#">Sản phẩm 3</a>
+  </div>
+  <div class="footer-column">
+    <h3>Công cụ</h3>
+    <a href="#">sản phẩm 3</a>
+    <a href="#">Sản phẩm 2</a>
+  </div>
+  <div class="footer-column">
+    <h3>Theo dõi chúng tôi.</h3>
+    <div class="footer-social">
+      <img th:src="@{/icon/ytb_icon.png}" alt="YouTube">
+      <img th:src="@{/icon/fb_icon.png}" alt="Facebook">
+      <img th:src="@{/icon/instagram.png}" alt="Instagram">
+    </div>
+  </div>
+</footer>
+<!-- ==================== JS: TÔ MÀU XANH KHI NHẤN ==================== -->
+<script>
+  // Tô màu xanh khi nhấn vào Danh mục
+  document.querySelectorAll('.category-item').forEach(item => {
+    item.addEventListener('click', function() {
+      document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Tô màu xanh khi nhấn vào Bộ lọc
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Modal
+  function showCreatePostModal() {
+    document.getElementById('createPostModal').style.display = 'flex';
+  }
+  function closeCreatePostModal() {
+    document.getElementById('createPostModal').style.display = 'none';
+  }
+
+  // Đóng modal khi nhấn ngoài
+  window.addEventListener('click', function(e) {
+    const modal = document.getElementById('createPostModal');
+    if (e.target === modal) closeCreatePostModal();
+  });
+
+  // Từ điển
+  document.getElementById('dict-toggle-btn').addEventListener('click', function(e) {
+    const container = document.getElementById('dict-container');
+    container.style.display = container.style.display === 'block' ? 'none' : 'block';
+    e.stopPropagation();
+  });
+  document.getElementById('dict-container').addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', () => {
+    document.getElementById('dict-container').style.display = 'none';
+  });
+</script>
+
+<!-- CSS bổ sung cho nút active -->
+<style>
+  .category-item.active, .filter-tab.active {
+    background-color: #0073e6 !important;
+    color: white !important;
+    border-radius: 8px;
+  }
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 9999; }
+  .modal-content { background: white; width: 90%; max-width: 600px; border-radius: 12px; overflow: hidden; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+  .form-actions { text-align: right; margin-top: 20px; }
+  .btn-cancel, .btn-submit { padding: 10px 20px; margin-left: 10px; border: none; border-radius: 6px; cursor: pointer; }
+  .btn-cancel { background: #ddd; }
+  .btn-submit { background: #0073e6; color: white; }
+</style>
+</body>
+</html>

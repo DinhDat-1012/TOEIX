@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học tập - ToeiX</title>
+    <link rel="stylesheet" th:href="@{/css/review_page.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .learning-container {
+            max-width: 1500px;
+            margin: 70px auto 20px;
+            padding: 20px;
+        }
+
+        .learning-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-title {
+            font-size: 24px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-bar-container {
+            width: 200px;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-height: calc(100vh - 220px);
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .lesson-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-item:hover {
+            background: #f5f5f5;
+        }
+
+        .lesson-item.active {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border-left-color: #667eea;
+            font-weight: 600;
+        }
+
+        .lesson-item.completed {
+            color: #4caf50;
+        }
+
+        .lesson-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            font-size: 14px;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            min-height: calc(100vh - 220px);
+        }
+
+        .lesson-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .lesson-header h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        .audio-player {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-timeline {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .audio-progress {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            transition: width 0.1s;
+        }
+
+        .lesson-content {
+            line-height: 1.8;
+            color: #444;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
+        .lesson-content h3 {
+            color: #333;
+            margin: 25px 0 15px;
+        }
+
+        .lesson-content p {
+            margin-bottom: 15px;
+        }
+
+        .quiz-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .quiz-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f5f5ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quiz-result {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                max-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="head_bar" id="head_bar">
+    <a href="/home">
+        <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px; color: rgb(250, 250, 254); position: relative;margin-bottom: 20%;"></i>
+    </a>
+    <a class="Web_subTitle">ToeiX - Học tiếng Anh ngay! </a>
+    <div class="serch_box">
+        <div class="serch_box_icon">
+            <input class="_input_15ttk_39" id="__serch_box" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+            <div id="search_results"> </div>
+        </div>
+        <script>
+            const searchBox = document.getElementById('__serch_box');
+            const searchResults = document.getElementById('search_results');
+
+            document.addEventListener('click', (event) => {
+                const isClickInsideInput = searchBox.contains(event.target);
+                const isClickInsideResults = searchResults.contains(event.target);
+
+                if (!isClickInsideInput && !isClickInsideResults) {
+                    searchBox.value = '';
+                    searchResults.innerHTML = '';
+                }
+            });
+
+            searchBox.addEventListener('input', ()=> {
+                const keyword = searchBox.value.trim();
+                if (keyword.length < 1) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
+                fetch(`http://localhost:8090/product/api/v1/courses/search?keyword=${encodeURIComponent(keyword)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResults.innerHTML = '';
+                        searchResults.style.borderRadius= "5px";
+                        searchResults.style.overflow= "hidden";
+                        searchResults.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                        searchResults.style.backgroundColor = "#fff";
+                        searchResults.style.marginTop = "5px";
+
+                        if (data.length === 0) {
+                            const notFound = document.createElement('div');
+                            notFound.textContent = 'Không tìm thấy kết quả cho:' + searchBox.value;
+                            notFound.style.padding = "10px";
+                            notFound.style.color = "red";
+                            notFound.style.textAlign = "center";
+                            notFound.style.cursor = "pointer";
+                            searchResults.appendChild(notFound);
+                            return;}
+
+                        data.forEach(course => {
+                            const div = document.createElement('div');
+                            div.className = 'result-item';
+                            div.style.color = "black";
+                            div.style.backgroundColor = "#e5e7e9";
+                            div.style.padding = "10px";
+                            div.style.cursor = "pointer";
+                            div.textContent = `${course.courseName} - ${course.courseCode}`;
+                            div.addEventListener("mouseover", () => {
+                                div.style.backgroundColor = "#d5dbdb"; });
+                            div.addEventListener("mouseout", () => {
+                                div.style.backgroundColor = "#e5e7e9"; });
+                            div.addEventListener('click', () => {
+                                alert(`Bạn đã chọn: ${course.courseName}`);
+                                searchBox.value = course.courseName;
+                                searchResults.innerHTML = '';
+                            });
+                            searchResults.appendChild(div);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+    </div>
+
+    <div class="user_courses">
+        <div class="user_courses_title" id="user_courses_title">
+            <p>Khóa học của tôi</p>
+            <div id="user-course-container" style="position: absolute; display: none; background-color: #f0f0f0;z-index: 8;overflow: hidden;border-radius: 10px;top: 60px"></div>
+        </div>
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </div>
+
+    <div class="noti_box" onclick="toggleNotifications()">
+        <i class="fa-solid fa-bell"></i>
+    </div>
+
+    <div id="notification-list" class="notification-list">
+        <p class="title">Thông báo</p>
+        <div id="notification-container"></div>
+    </div>
+
+    <div class="navBar_">
+        <nav class="user_i4_box">
+            <div class="user_ico" onclick="toggleMenu()">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="user_avatar">
+            </div>
+            <div class="user_status"></div>
+        </nav>
+
+        <div class="profile-menu" id="profileMenu">
+            <div class="profile-header">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar" class="profile-pic">
+                <div class="profile-info">
+                    <p class="name" id="fullName">Anonymous</p>
+                    <p class="username" id="username">Anonymous</p>
+                </div>
+            </div>
+            <hr>
+            <ul>
+                <a href="/personal" style="text-decoration: none"><li>📌 Trang cá nhân</li></a>
+                <li>📝 Viết blog</li>
+                <a href="/vocabulary" style="text-decoration: none"><li>📝 Từ mới mỗi ngày</li></a>
+                <a href="/toeic-test" style="text-decoration: none"><li>📝 Thi Thử Toeic</li></a>
+                <hr>
+                <li>⚙️ Cài đặt</li>
+                <li class="logout" onclick="logOut()">🔓 Đăng xuất</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Learning Page Content -->
+
+<div class="learning-container">
+    <div class="learning-header">
+        <div>
+            <div class="course-title" id="courseTitle">Đang tải khóa học...</div>
+        </div>
+        <div class="progress-info">
+            <span id="progressText">0/0 bài học</span>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="sidebar">
+            <h3>Danh sách bài học</h3>
+            <div id="lessonList"></div>
+        </div>
+
+        <div class="content-area">
+            <div id="contentContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Đang tải nội dung...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer_wrapper">
+    <div class="footer-column">
+        <h3>Học Tiếng Anh Để Đi Làm</h3>
+        <p>Điện thoại: 0398756015</p>
+        <p>Email: Dinhdat1012vn@gmail.com</p>
+        <p>Địa chỉ: Số 16, ngõ 257, Thanh Nhàn, Hai Bà Trưng, Hà Nội</p>
+    </div>
+    <div class="footer-column">
+        <h3>Về Chúng Tôi</h3>
+        <a href="#">Giới thiệu</a>
+        <a href="#">Liên hệ</a>
+        <a href="#">Điều khoản</a>
+        <a href="#">Bảo mật</a>
+    </div>
+    <div class="footer-column">
+        <h3>Sản phẩm</h3>
+        <a href="#">Sản Phẩm 1</a>
+        <a href="#">Sản Phẩm 2</a>
+        <a href="#">Sản phẩm 3</a>
+    </div>
+    <div class="footer-column">
+        <h3>Công cụ</h3>
+        <a href="#">sản phẩm 3</a>
+        <a href="#">Sản phẩm 2</a>
+    </div>
+    <div class="footer-column">
+        <h3>Theo dõi chúng tôi.</h3>
+        <div class="footer-social">
+            <img th:src="@{/icon/ytb_icon.png}" alt="YouTube">
+            <img th:src="@{/icon/fb_icon.png}" alt="Facebook">
+            <img th:src="@{/icon/instagram.png}" alt="Instagram">
+        </div>
+    </div>
+
+    <!-- Dictionary Plugin -->
+    <style>
+        #dict-toggle-btn {
+            position: fixed;
+            bottom: 250px;
+            right: 10px;
+            background-color: #2f86eb;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        #dict-container {
+            position: fixed;
+            bottom: 20px;
+            right: 70px;
+            display: none;
+            z-index: 9999;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+
+    <button id="dict-toggle-btn">
+        <i class="fa fa-book" aria-hidden="true" style="color: #5a5959;font-size: 16px"></i>
+    </button>
+
+    <div id="dict-container">
+        <script id="lbdict_plugin_frame" type="text/javascript">
+            !function(){
+                var h={s:"https://dict.laban.vn",w:260,h:260,hl:2,th:3};
+                function loadScript(t,e){
+                    var n=document.createElement("script");
+                    n.type="text/javascript";
+                    n.readyState?n.onreadystatechange=function(){
+                        ("loaded"===n.readyState||"complete"===n.readyState)&&(n.onreadystatechange=null,e())
+                    }:n.onload=function(){
+                        e()
+                    };
+                    n.src=t;
+                    q=document.getElementById("lbdict_plugin_frame");
+                    q.parentNode.insertBefore(n,q);
+                }
+                setTimeout(function(){
+                    loadScript("https://stc-laban.zdn.vn/dictionary/js/plugin/lbdictplugin.frame.min.js",function(){
+                        lbDictPluginFrame.init(h);
+                    })
+                },1000);
+            }();
+        </script>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('dict-toggle-btn');
+        const dictContainer = document.getElementById('dict-container');
+
+        toggleBtn.addEventListener('click', (e) => {
+            dictContainer.style.display = dictContainer.style.display === 'none' ? 'block' : 'none';
+            e.stopPropagation();
+        });
+
+        dictContainer.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        document.addEventListener('click', () => {
+            dictContainer.style.display = 'none';
+        });
+    </script>
+
+    <div class="footer-bottom">©2024 - 2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
+</footer>
+
+<audio id="audioPlayer" style="display: none;"></audio>
+
+<script th:src="@{/js/review_page_script.js}"></script>
+
+<!-- Learning Platform Script -->
+<script>
+    // ====================== DOM & STATE ======================
+    const courseId = window.location.pathname.split("/").pop();
+    const courseTitleEl = document.getElementById("courseTitle");
+    const lessonListEl = document.getElementById("lessonList");
+    const contentContainer = document.getElementById("contentContainer");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+
+    let lessons = [];
+    let currentIndex = 0;
+    let completedLessons = new Set();
+
+    // ====================== SAMPLE DATA ======================
+    const SAMPLE_DATA = {
+        course: {
+            id: 1,
+            course_name: "TOEIC Cơ Bản - Khóa Học Cho Người Mới Bắt Đầu",
+            course_code: "TOEIC-001",
+            description: `
+      Khóa học TOEIC cơ bản dành cho người mới bắt đầu, giúp học viên xây dựng nền tảng tiếng Anh vững chắc.
+      Nội dung bao gồm: nghe, đọc, từ vựng, ngữ pháp và kỹ năng làm bài thi TOEIC.
+      Khóa học kết hợp lý thuyết với bài tập thực hành, video minh họa, và các bài kiểm tra thử.
+      Sau khi hoàn thành, học viên có thể đạt mức điểm TOEIC từ 350 - 550.
+    `,
+            duration: 120, // giờ học
+        },
+        lessons: [
+            {
+                id: 1,
+                title: "Bài 1: Giới thiệu về TOEIC và chiến lược học",
+                content_text: `
+        Chào mừng bạn đến với khóa học TOEIC!
+
+        Trong bài học này, bạn sẽ tìm hiểu về:
+        - Cấu trúc bài thi TOEIC: Listening & Reading.
+        - Mẹo làm bài hiệu quả: phân bổ thời gian, nhận diện câu hỏi dễ.
+        - Tầm quan trọng của việc luyện tập hàng ngày và xây dựng kế hoạch học tập cá nhân.
+
+        Bạn sẽ thực hành một số câu hỏi mẫu để làm quen với dạng đề thi.
+      `,
+                document_url: "https://example.com/docs/intro_to_toeic.pdf",
+                video_url: "http://localhost:8090/videos/IELTS_tutorial_les1.mp4",
+                result_url: null,
+                course_id: 1,
+            },
+            {
+                id: 2,
+                title: "Bài 2: Phần Listening - Part 1: Photographs",
+                content_text: `
+        Part 1 của phần Listening yêu cầu bạn mô tả tranh.
+        Nội dung bài học bao gồm:
+        - Nhận biết các đối tượng, hành động, bối cảnh trong tranh.
+        - Luyện nghe câu mô tả và so sánh với hình ảnh.
+        - Chiến lược loại trừ đáp án sai và tập trung vào từ khóa.
+
+        Thực hành với 20 bức tranh mẫu kèm đáp án.
+      `,
+                document_url: "https://example.com/docs/listening_part1.pdf",
+                video_url: "https://www.w3schools.com/html/mov_bbb.mp4",
+                result_url: "https://example.com/results/lesson2_quiz",
+                course_id: 1,
+            },
+            {
+                id: 3,
+                title: "Bài 3: Từ vựng theo chủ đề - Công việc và môi trường làm việc",
+                content_text: `
+        Trong bài này, bạn sẽ học các từ vựng quan trọng liên quan đến:
+        - Các loại công việc: manager, engineer, receptionist...
+        - Môi trường văn phòng: meeting room, cubicle, deadline...
+        - Hoạt động công việc hàng ngày: schedule, report, email.
+
+        Bao gồm cả bài tập điền từ, ghép từ với nghĩa và luyện nghe từ mới trong ngữ cảnh.
+      `,
+                document_url: "https://example.com/docs/vocabulary_work.pdf",
+                video_url: null,
+                result_url: "https://example.com/results/lesson3_quiz",
+                course_id: 1,
+            },
+            {
+                id: 4,
+                title: "Bài 4: Ngữ pháp cơ bản cho TOEIC - Hiện tại đơn và hiện tại tiếp diễn",
+                content_text: `
+        Bài học này giúp bạn nắm vững các cấu trúc ngữ pháp căn bản:
+        - Hiện tại đơn (Present Simple) và các từ khóa thường gặp trong bài thi TOEIC.
+        - Hiện tại tiếp diễn (Present Continuous) và cách phân biệt với hiện tại đơn.
+        - Thực hành đặt câu, điền vào chỗ trống, và luyện tập làm bài thi nhỏ.
+      `,
+                document_url: "https://example.com/docs/grammar_present.pdf",
+                video_url: "https://www.w3schools.com/html/mov_bbb.mp4",
+                result_url: "https://example.com/results/lesson4_quiz",
+                course_id: 1,
+            },
+            {
+                id: 5,
+                title: "Bài 5: Listening - Part 2: Question-Response",
+                content_text: `
+        Học cách trả lời nhanh các câu hỏi nghe:
+        - Nhận diện câu hỏi và chọn đáp án đúng trong 3 lựa chọn.
+        - Chiến lược đoán câu trả lời dựa trên ngữ cảnh và từ khóa.
+        - Thực hành với 30 câu nghe mẫu, có transcript và đáp án.
+      `,
+                document_url: "https://example.com/docs/listening_part2.pdf",
+                video_url: "https://www.w3schools.com/html/mov_bbb.mp4",
+                result_url: "https://example.com/results/lesson5_quiz",
+                course_id: 1,
+            }
+        ]
+    };
+
+
+    // ====================== UTILS: NORMALIZE DATA ======================
+    // Chuẩn hóa lesson để render chung cho cả API và SAMPLE_DATA
+    function normalizeLesson(ls) {
+        return {
+            title: ls.title,
+            // Ưu tiên content từ API, nếu không có thì lấy content_text từ mẫu
+            contentHtml:
+                (ls.content ? ls.content : ls.content_text || "")
+                    .replace(/\n/g, "<br>"),
+            videoSrc: ls.videoUrl || ls.video_url || null,
+            audioSrc: ls.audioUrl || ls.audio_url || null,
+            duration: ls.duration || "N/A",
+            type: ls.type || "Lesson"
+        };
+    }
+
+    // ====================== LOAD COURSE ======================
+    async function loadCourse() {
+        try {
+            // Thử API
+            const res = await fetch(`http://localhost:8090/product/api/v1/courses/${courseId}`);
+            if (!res.ok) throw new Error("API lỗi");
+            const course = await res.json();
+
+            courseTitleEl.textContent = course.courseName || SAMPLE_DATA.course.course_name;
+            // Lấy lessons từ API, nếu rỗng thì fallback sample
+            lessons = Array.isArray(course.lessons) && course.lessons.length > 0
+                ? course.lessons
+                : SAMPLE_DATA.lessons;
+
+        } catch (err) {
+            // Fallback sample
+            courseTitleEl.textContent = SAMPLE_DATA.course.course_name;
+            lessons = SAMPLE_DATA.lessons;
+        }
+
+        renderLessonList();
+        updateProgress();
+        if (lessons.length > 0) loadLesson(0);
+    }
+
+    // ====================== RENDER SIDEBAR ======================
+    function renderLessonList() {
+        lessonListEl.innerHTML = "";
+        lessons.forEach((ls, index) => {
+            const div = document.createElement("div");
+            div.className = "lesson-item";
+            div.id = `lesson-${index}`;
+            div.innerHTML = `
+        <div class="lesson-icon">${completedLessons.has(index) ? '<i class="fas fa-check"></i>' : index + 1}</div>
+        <span>${ls.title}</span>
+      `;
+            div.addEventListener("click", () => loadLesson(index));
+            lessonListEl.appendChild(div);
+        });
+        highlightActiveLesson();
+    }
+
+    // ====================== LOAD ONE LESSON ======================
+    function loadLesson(index) {
+        currentIndex = index;
+        const raw = lessons[index];
+        const lesson = normalizeLesson(raw);
+
+        highlightActiveLesson();
+
+        contentContainer.innerHTML = `
+      <div class="lesson-header">
+        <h2>${lesson.title}</h2>
+        <div class="lesson-meta">
+          <span>⏱ Thời lượng: ${lesson.duration}</span>
+          <span>📄 Loại: ${lesson.type}</span>
+        </div>
+      </div>
+
+      ${lesson.videoSrc ? `
+        <div class="video-container">
+          <video controls>
+            <source src="${lesson.videoSrc}" type="video/mp4">
+          </video>
+        </div>
+      ` : ""}
+
+      ${lesson.audioSrc ? `
+        <div class="audio-player">
+          <audio controls>
+            <source src="${lesson.audioSrc}" type="audio/mpeg">
+          </audio>
+        </div>
+      ` : ""}
+
+      <div class="lesson-content">${lesson.contentHtml}</div>
+
+      <div class="navigation-buttons">
+        <button class="btn btn-secondary" onclick="prevLesson()" ${index === 0 ? "disabled" : ""}>⬅ Bài trước</button>
+        <button class="btn btn-primary" onclick="nextLesson()" ${index === lessons.length - 1 ? "disabled" : ""}>Bài tiếp ➡</button>
+      </div>
+    `;
+
+        markCompleted(index);
+        updateProgress();
+    }
+
+    // ====================== HIGHLIGHT ACTIVE ======================
+    function highlightActiveLesson() {
+        document.querySelectorAll(".lesson-item").forEach(e => e.classList.remove("active"));
+        const active = document.getElementById(`lesson-${currentIndex}`);
+        if (active) active.classList.add("active");
+    }
+
+    // ====================== MARK COMPLETED ======================
+    function markCompleted(i) {
+        const item = document.getElementById(`lesson-${i}`);
+        if (item) item.classList.add("completed");
+    }
+
+    // ====================== PROGRESS ======================
+    function updateProgress() {
+        const completed = document.querySelectorAll(".lesson-item.completed").length;
+        const total = lessons.length;
+        progressText.textContent = `${completed}/${total} bài học`;
+        progressBar.style.width = total > 0 ? `${(completed / total) * 100}%` : "0%";
+    }
+
+    // ====================== NAVIGATION ======================
+    function nextLesson() {
+        if (currentIndex < lessons.length - 1) loadLesson(currentIndex + 1);
+    }
+    function prevLesson() {
+        if (currentIndex > 0) loadLesson(currentIndex - 1);
+    }
+
+    // ====================== START ======================
+    document.addEventListener("DOMContentLoaded", loadCourse);
+</script>

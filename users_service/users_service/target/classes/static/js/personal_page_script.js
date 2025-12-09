@@ -122,6 +122,10 @@ function displayUserCourse(course) {
             </div>
             <small style="color: black;padding-left: 15px">${new Date(course.purchaseDate).toLocaleString()}</small>
         `;
+
+        courseElement.addEventListener("click", () => {
+            window.location.href = `http://localhost:8080/Course/${course.courseCode}`;
+        });
         courseElement.addEventListener("mouseover", () => {
             courseElement.style.backgroundColor = "#d5dbdb"; });
         courseElement.addEventListener("mouseout", () => {

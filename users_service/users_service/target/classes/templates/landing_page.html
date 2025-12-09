@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
 </head>
 <body>
-    
+
     <nav class="head_bar" id="head_bar">
         <a href="#">
             <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px;color: aliceblue; margin-bottom: 10px;"></i>
@@ -118,6 +118,7 @@
           </div>
         </form>
         <p>Không có tài khoản? <a class="openRegisterForm" href="#" onclick="openRegisterFormToCreateAccount()">Tạo tài khoản ngay.</a></p>
+        <p>Quên mật khẩu? <a class="openRegisterForm" href="#" onclick="openResetPasswordFormToCreateAccount()">Lấy lại mật khẩu.</a></p>
         <small>
           This page is Copyrighted (©) 2025 designed by Dinh Duc Dat.
           <a href="#">Learn more.</a>
@@ -145,6 +146,43 @@
                 <label>Nhập lại mật khẩu</label>
             </div>
             <button type="submit" class="Register-button" onclick="signUpButtonClick()">Đăng ký ngay.</button>
+        </form>
+
+        <p>Đã có tài khoản? <a class="openLoginForm" href="#" onclick="openLoginformToSignIn()">Đăng nhập ngay.</a></p>
+        <small>
+            This page is Copyrighted (©) 2025 designed by Dinh Duc Dat.
+            <a href="#">Learn more.</a>
+        </small>
+    </div>
+    <!--Forgot pass word form -->
+    <div class="reset_pw_form_wrapper" style="display:none;">
+        <h2>Khôi phục mật khẩu</h2>
+        <form action="#" id="reset_pw_Form">
+            <div class="register_form_control">
+                <input id="_user_email" type="text" required>
+                <label>Địa chỉ email</label>
+            </div>
+            <div class="reset_pw_form_control">
+                <input id="user_name" type="text" required>
+                <label>Tên đăng nhập</label>
+            </div>
+
+            <div class="reset_pw_form_control">
+
+                    <input id="reset_OTP" type="text" required>
+                    <label>OTP</label>
+            </div>
+
+            <div class="register_form_control">
+                <input id="reset_password" type="password" required>
+                <label>Mật khẩu mới</label>
+            </div>
+            <div class="register_form_control">
+                <input id="reset_password_repeat" type="password" required>
+                <label>Nhập lại mật khẩu</label>
+            </div>
+            <button type="submit" class="Register-button" onclick="reset_password()">Đổi mật khẩu.</button>
+            <button type="button" class="get_otp_button" onclick="get_OTP()">Nhận mã OTP.</button>
         </form>
 
         <p>Đã có tài khoản? <a class="openLoginForm" href="#" onclick="openLoginformToSignIn()">Đăng nhập ngay.</a></p>

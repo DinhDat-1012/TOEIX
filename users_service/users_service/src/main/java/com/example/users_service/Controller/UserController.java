@@ -36,12 +36,14 @@ public class UserController {
     public String showReviewPage(Model model) {
         return "review_page"; // Trả về tên file Thymeleaf trong templates
     }
+
     @GetMapping("/vocabulary")
     public String showVocabularyPage(Model model) {
         return "vocabulary"; // Trả về tên file Thymeleaf trong templates
     }
+
     @GetMapping("/test-personal")
-    public String showPersonalPage(@RequestHeader String username,@RequestHeader String token ,Model model) {
+    public String showPersonalPage(@RequestHeader String username, @RequestHeader String token, Model model) {
 
         // Chặn luồng chính đợi response từ userService
         String response = userService.CheckValidToken(username, token).block();
@@ -54,11 +56,13 @@ public class UserController {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Lỗi khi parse JSON", e);
         }
-        if(authResponse.getStatus().equals("valid")) {
+        if (authResponse.getStatus().equals("valid")) {
             return "personal_page";
-        }throw (new RuntimeException("Invalid Token"));
+        }
+        throw (new RuntimeException("Invalid Token"));
 
     }
+
     @GetMapping(path = "/home")
     public String showHomePage(Model model) {
         return "home_page";
@@ -68,4 +72,15 @@ public class UserController {
     public String toeic_test(Model model) {
         return "Toeic_exam";
     }
+
+    @GetMapping("/forum")
+    public String showForumPage(Model model) {
+        return "Forum"; // Trả về tên file Thymeleaf trong templates
+    }
+
+    @GetMapping("/Course/{id}")
+    public String showCoursePage(Model model) {
+        return "Course_learning"; // Trả về tên file Thymeleaf trong templates
+    }
 }
+

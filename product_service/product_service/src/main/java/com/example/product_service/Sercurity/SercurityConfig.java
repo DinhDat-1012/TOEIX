@@ -21,7 +21,8 @@ public class SercurityConfig {
         return http
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu không cần
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**","/product/api/v1/all-course","/product/api/v1/courses/**").permitAll()
+                        .requestMatchers("/**","/product/api/v1/all-course","/product/api/v1/courses/**","/videos/**"
+).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

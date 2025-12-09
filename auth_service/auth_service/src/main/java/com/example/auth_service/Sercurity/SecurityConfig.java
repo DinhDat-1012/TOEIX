@@ -23,9 +23,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.disable())
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF nếu không cần
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login","/auth-api/jwt-check", "/js/**","/auth-api/register", "/images/**","/banner/**","/Course_img/**").permitAll()
+                        .requestMatchers("/auth/login",
+                                "/auth-api/jwt-check",
+                                "/js/**","/auth-api/register", "/images/**",
+                                "/banner/**","/Course_img/**"
+                        ,"/auth/send-otp")
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -19,7 +19,6 @@
     height: 60px;
 }
 
-
 /* Tiêu đề */
 .Web_subTitle {
     font-size: 20px;
@@ -41,13 +40,9 @@
 
 .serch_box_icon {
     position: relative;
-   margin-left: 0px;
+    margin-left: 0px;
     top: 17%;
-
 }
-
-
-
 
 ._input_15ttk_39 {
     width: 400px;
@@ -70,14 +65,13 @@
     display: flex;
     justify-content: space-between;
     float: left;
-    margin-top:  5px;
+    margin-top: 5px;
     margin-left: 15px;
     right: 20px;
 }
 
 /* Nút đăng nhập & đăng ký */
 .login_button, .register_button {
-
     display: flex;
     justify-content: space-around;
     padding: 10px 20px;
@@ -89,7 +83,7 @@
     right: 20px;
     top: 50%;
     align-items: center;
-    margin-right: 5px; 
+    margin-right: 5px;
     transition: all 0.3s ease;
 }
 
@@ -99,7 +93,7 @@
 }
 
 .register_button {
-    background-color:  #e50914;
+    background-color: #e50914;
     color: white;
 }
 
@@ -116,7 +110,7 @@
     ._input_15ttk_39 {
         width: 100%;
     }
-    
+
     .navBar_portal {
         flex-direction: column;
         align-items: center;
@@ -128,34 +122,37 @@
     }
 }
 
-/*Register and login form*/
-
+/* ==================== LOGIN FORM ==================== */
 .login_form_wrapper {
     position: fixed;
     left: 50%;
     top: 50%;
-    z-index: 1;
+    z-index: 5;
     border-radius: 4px;
     padding: 70px;
     width: 420px;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.75);
-  }
-  .login_form_wrapper h2 {
+}
+
+.login_form_wrapper h2 {
     justify-self: center;
     color: #fff;
     font-size: 2rem;
     margin-bottom: 20px;
-  }
-  .login_form_wrapper form {
+}
+
+.login_form_wrapper form {
     margin: 25px 0 65px;
-  }
-  form .form-control {
+}
+
+form .form-control {
     height: 50px;
     position: relative;
     margin-bottom: 16px;
-  }
-  .form-control input {
+}
+
+.form-control input {
     height: 100%;
     width: 100%;
     background: #333;
@@ -165,12 +162,14 @@
     color: #fff;
     font-size: 1rem;
     padding: 0 20px;
-  }
-  .form-control input:is(:focus, :valid) {
+}
+
+.form-control input:is(:focus, :valid) {
     background: #444;
     padding: 16px 20px 0;
-  }
-  .form-control label {
+}
+
+.form-control label {
     position: absolute;
     left: 20px;
     top: 50%;
@@ -179,12 +178,14 @@
     pointer-events: none;
     color: #8c8c8c;
     transition: all 0.1s ease;
-  }
-  .form-control input:is(:focus, :valid) ~ label {
+}
+
+.form-control input:is(:focus, :valid) ~ label {
     font-size: 0.75rem;
     transform: translateY(-130%);
-  }
-  form button {
+}
+
+form button {
     width: 100%;
     padding: 16px 0;
     font-size: 1rem;
@@ -197,69 +198,60 @@
     margin: 25px 0 10px;
     cursor: pointer;
     transition: 0.1s ease;
-  }
-  form button:hover {
+}
+
+form button:hover {
     background: #c40812;
-  }
-  .login_form_wrapper a {
+}
+
+.login_form_wrapper a {
     text-decoration: none;
-  }
-  .login_form_wrapper a:hover {
+}
+
+.login_form_wrapper a:hover {
     text-decoration: underline;
-  }
-  .login_form_wrapper :where(label, p, small, a) {
+}
+
+.login_form_wrapper :where(label, p, small, a) {
     color: #b3b3b3;
-  }
-  form .form-help {
+}
+
+form .form-help {
     display: flex;
     justify-content: space-between;
-  }
-  form .remember-me {
+}
+
+form .remember-me {
     display: flex;
-  }
-  form .remember-me input {
+}
+
+form .remember-me input {
     margin-right: 5px;
     accent-color: #b3b3b3;
-  }
-  form .form-help :where(label, a) {
+}
+
+form .form-help :where(label, a) {
     font-size: 0.9rem;
-  }
-  .login_form_wrapper p a {
+}
+
+.login_form_wrapper p a {
     color: #fff;
-  }
-  .login_form_wrapper small {
+}
+
+.login_form_wrapper small {
     display: block;
     margin-top: 15px;
     color: #b3b3b3;
-  }
-  .login_form_wrapper small a {
+}
+
+.login_form_wrapper small a {
     color: #0071eb;
-  }
-  @media (max-width: 740px) {
-    body::before {
-      display: none;
-    }
-    nav,
-    .login_form_wrapper {
-      padding: 20px;
-    }
-    nav a img {
-      width: 140px;
-    }
-    .login_form_wrapper {
-      width: 100%;
-      top: 43%;
-    }
-    .login_form_wrapper form {
-      margin: 25px 0 40px;
-    }
-  }
+}
 
-/* Form đăng ký */
-
+/* ==================== REGISTER FORM ==================== */
 .register_form_wrapper {
     position: fixed;
-    z-index: 1;
+    z-index: 5;
     left: 50%;
     top: 55%;
     border-radius: 4px;
@@ -269,16 +261,17 @@
     background: rgba(0, 0, 0, 0.75);
 }
 
-.register_form_wrapper h2{
+.register_form_wrapper h2 {
     justify-self: center;
     color: #fff;
     font-size: 2rem;
     margin-bottom: 20px;
 }
 
-.register_form_wrapper form{
+.register_form_wrapper form {
     margin: 10px 0 40px;
 }
+
 .register_form_control {
     height: 50px;
     position: relative;
@@ -307,14 +300,16 @@
     font-size: 1rem;
     padding: 0 20px;
 }
+
 .register_form_control input:is(:focus, :valid) {
     background: #444;
     padding: 16px 20px 0;
-  }
+}
+
 .register_form_control input:is(:focus, :valid) ~ label {
     font-size: 0.75rem;
     transform: translateY(-130%);
-  }
+}
 
 .Register-button {
     width: 100%;
@@ -331,327 +326,530 @@
     transition: 0.1s ease;
 }
 
-.register-button:hover {
-    background: darkred;
+.Register-button:hover {
+    background: #c40812;
 }
 
 .register_form_wrapper a {
     text-decoration: none;
-  }
+}
 
 .register_form_wrapper a:hover {
     text-decoration: underline;
-  }
+}
 
 .register_form_wrapper :where(label, p, small, a) {
     color: #b3b3b3;
-  }
+}
 
 .register_form_wrapper p a {
     color: #fff;
-  }
+}
+
 .register_form_wrapper small {
     display: block;
     margin-top: 15px;
     color: #b3b3b3;
-  }
+}
+
 .register_form_wrapper small a {
     color: #0071eb;
-  }
-/*hiển thị banner trang web*/
+}
 
+/* ==================== RESET PASSWORD FORM ==================== */
+.reset_pw_form_wrapper {
+    position: fixed;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    border-radius: 4px;
+    padding: 60px;
+    width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.reset_pw_form_wrapper h2 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.reset_pw_form_wrapper form {
+    margin: 15px 0 30px;
+}
+
+.reset_pw_form_control {
+    height: 50px;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.reset_pw_form_control label {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    pointer-events: none;
+    color: #8c8c8c;
+    transition: all 0.1s ease;
+}
+
+.reset_pw_form_control input {
+    height: 100%;
+    width: 100%;
+    background: #333;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    padding: 0 20px;
+}
+
+.reset_pw_form_control input:is(:focus, :valid) {
+    background: #444;
+    padding: 16px 20px 0;
+}
+
+.reset_pw_form_control input:is(:focus, :valid) ~ label {
+    font-size: 0.75rem;
+    transform: translateY(-130%);
+}
+
+
+
+
+
+.reset_pw_form_control button[type="button"] {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 0.95rem;
+    background: #0073e6;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 5px;
+}
+
+.reset_pw_form_control button[type="button"]:hover {
+    background: #005bb5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 115, 230, 0.3);
+}
+
+.reset_pw_form_control button[type="button"]:active {
+    transform: translateY(0);
+}
+
+.reset_pw_form_wrapper .Register-button {
+    width: 100%;
+    padding: 16px 0;
+    font-size: 1rem;
+    background: #e50914;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    margin: 25px 0 10px;
+    cursor: pointer;
+    transition: 0.1s ease;
+}
+
+.reset_pw_form_wrapper .Register-button:hover {
+    background: #c40812;
+}
+
+.reset_pw_form_wrapper a {
+    text-decoration: none;
+}
+
+.reset_pw_form_wrapper a:hover {
+    text-decoration: underline;
+}
+
+.reset_pw_form_wrapper :where(label, p, small, a) {
+    color: #b3b3b3;
+}
+
+.reset_pw_form_wrapper p {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.reset_pw_form_wrapper p a {
+    color: #fff;
+}
+
+.reset_pw_form_wrapper small {
+    display: block;
+    margin-top: 15px;
+    color: #b3b3b3;
+    text-align: center;
+}
+
+.reset_pw_form_wrapper small a {
+    color: #0071eb;
+}
+
+/* Custom scrollbar for reset password form */
+.reset_pw_form_wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.reset_pw_form_wrapper::-webkit-scrollbar-track {
+    background: #222;
+    border-radius: 4px;
+}
+
+.reset_pw_form_wrapper::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.reset_pw_form_wrapper::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Responsive for all forms */
+@media (max-width: 740px) {
+    .login_form_wrapper,
+    .register_form_wrapper,
+    .reset_pw_form_wrapper {
+        width: 95%;
+        padding: 40px 30px;
+        top: 50%;
+    }
+
+    .reset_pw_form_wrapper {
+        max-height: 85vh;
+    }
+
+    .login_form_wrapper form,
+    .register_form_wrapper form,
+    .reset_pw_form_wrapper form {
+        margin: 20px 0 30px;
+    }
+}
+
+/* ==================== SLIDESHOW ==================== */
 .slideshow-container {
-  position: relative;
-
-  z-index: -1;
-  height: 300px;
-  max-width: 100%;
-  top: 30px;
-  margin-top: 40px;
-  margin-bottom: 30px;
-  margin-left: 30px;
-  margin-right: 30px;
-  border-radius: 8px;
-
-
-  overflow: hidden;
+    position: relative;
+    z-index: -1;
+    height: 300px;
+    max-width: 100%;
+    top: 30px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
+    border-radius: 8px;
+    overflow: hidden;
 }
+
 .slides {
-  display: none;
-  height: auto;
-  object-fit: cover;
-  width: 100%;
+    display: none;
+    height: auto;
+    object-fit: cover;
+    width: 100%;
 }
+
 .active {
-  display: block;
+    display: block;
 }
+
 .fade {
     animation: fadeEffect 2s;
 }
+
 @keyframes fadeEffect {
-    from {opacity: 0.4;} 
+    from {opacity: 0.4;}
     to {opacity: 1;}
 }
-/*Hiển thị thông tin các khóa học ===========================================================*/
-/*Hiển thị khóa học mới*/
+
+/* ==================== COURSE SECTIONS ==================== */
+/* New Courses */
 .new_course_container {
-  display: flex;
-  justify-content: left;
-  gap: 20px;
-  height: auto;
-  width: auto;
-  margin-top: 20px;
-  margin-left: 30px;
-  margin-right: 20px;
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+    height: auto;
+    width: auto;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 20px;
 }
 
-.new_course_heading{
-  margin-top: 40px;
-  margin: 20px;
-  text-align: left;
-  padding: 30px;
-  font-size: 20px;
-  font-weight: bold;
+.new_course_heading {
+    margin-top: 40px;
+    margin: 20px;
+    text-align: left;
+    padding: 30px;
+    font-size: 20px;
+    font-weight: bold;
 }
-.new_course_label{
-  z-index: -2;
-  position: absolute;
-  background-color: #0071eb;
-  color: #fff;
-  padding: 3px;
-  border-radius: 3px;
-  font-size: 10px;
-  margin-bottom: 10px;
-  margin-left: 5px;
+
+.new_course_label {
+    z-index: -2;
+    position: absolute;
+    background-color: #0071eb;
+    color: #fff;
+    padding: 3px;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
 }
 
 .new_course_container .course-card {
-  background: #fff;
-  z-index: 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: 300px;
-  height: auto;
-  text-align: center;
-  overflow: hidden;
+    background: #fff;
+    z-index: 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 300px;
+    height: auto;
+    text-align: center;
+    overflow: hidden;
 }
-.new_course_container .course-card:hover{
-  transform: scale(1.05);
-  box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+
+.new_course_container .course-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
 }
+
 .new_course_container .course-card img {
-  width: 100%;
-  height: 180px;
+    width: 100%;
+    height: 180px;
 }
-.course-content {
-  padding: 15px;
-  cursor: pointer;
+
+/* Pro Courses */
+.pro_course_heading {
+    margin: 20px;
+    text-align: left;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
 }
-.course-title {
-  font-size: 18px;
-  font-weight: bold;
+
+.all_pro_course_view {
+    position: relative;
+    left: 80%;
 }
-.course-price {
-  color: red;
-  font-size: 16px;
+
+.all_pro_course_view a {
+    position: relative;
+    color: #e50914;
+    font-size: small;
+    text-decoration: none;
 }
-.course-price:hover{
-  text-decoration: underline;
+
+.all_pro_course_view a:hover {
+    text-decoration: underline;
+    font-size: 14px;
 }
-/*Hiển thị khóa học pro*/
-.pro_course_heading{
-  margin: 20px;
-  text-align: left;
-  padding: 20px;
-  font-size: 20px;
-  font-weight: bold;
+
+.pro_course_label {
+    z-index: -2;
+    position: absolute;
+    background-color: #0071eb;
+    color: #fff;
+    padding: 3px;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
 }
-.all_pro_course_view{
-  position: relative;
-  left: 80%;
-}
-.all_pro_course_view a{
-  position: relative;
-  color: #e50914;
-  font-size: small;
-  text-decoration: none;
-}
-.all_pro_course_view a:hover{
-  text-decoration: underline;
-  font-size: 14px;
-}
-.pro_course_label{
-  z-index: -2;
-  position: absolute;
-  background-color: #0071eb;
-  color: #fff;
-  padding: 3px;
-  border-radius: 3px;
-  font-size: 10px;
-  margin-bottom: 10px;
-  margin-left: 5px;
-}
+
 .pro_course_container {
-  display: flex;
-  justify-content: left;
-  gap: 20px;
-  height: auto;
-  width: auto;
-  margin-top: 20px;
-  margin-left: 30px;
-  margin-right: 20px;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+    height: auto;
+    width: auto;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
+
 .pro_course_container .course-card {
-  background: #fff;
-  border-radius: 10px;
-  z-index: 0;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: 300px;
-  height: auto;
-  text-align: center;
-  overflow: hidden;
+    background: #fff;
+    border-radius: 10px;
+    z-index: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 300px;
+    height: auto;
+    text-align: center;
+    overflow: hidden;
 }
-.pro_course_container .course-card:hover{
-  transform: scale(1.05);
-  box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+
+.pro_course_container .course-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
 }
+
 .pro_course_container .course-card img {
-  width: 100%;
-  height: 180px;
+    width: 100%;
+    height: 180px;
 }
-.course-content {
-  padding: 15px;
-  cursor: pointer;
+
+/* Free Courses */
+.free_course_heading {
+    margin: 20px;
+    text-align: left;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
 }
-.course-title {
-  font-size: 18px;
-  font-weight: bold;
+
+.free_course_label {
+    z-index: -2;
+    position: absolute;
+    background-color: #0071eb;
+    color: #fff;
+    padding: 3px;
+    border-radius: 3px;
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
 }
-.course-price {
-  color: red;
-  font-size: 16px;
+
+.all_free_course_view {
+    position: relative;
+    left: 77%;
 }
-/*Hiển thị khóa học miễn phí*/
-.free_course_heading{
-  margin: 20px;
-  text-align: left;
-  padding: 20px;
-  font-size: 20px;
-  font-weight: bold;
+
+.all_free_course_view a {
+    position: relative;
+    color: #e50914;
+    font-size: small;
+    text-decoration: none;
 }
-.free_course_label{
-  z-index: -2;
-  position: absolute;
-  background-color: #0071eb;
-  color: #fff;
-  padding: 3px;
-  border-radius: 3px;
-  font-size: 10px;
-  margin-bottom: 10px;
-  margin-left: 5px;
+
+.all_free_course_view a:hover {
+    text-decoration: underline;
+    font-size: 14px;
 }
-.all_free_course_view{
-  position: relative;
-  left: 77%;
-}
-.all_free_course_view a{
-  position: relative;
-  color: #e50914;
-  font-size: small;
-  text-decoration: none;
-}
-.all_free_course_view a:hover{
-  text-decoration: underline;
-  font-size: 14px;
-}
+
 .free_course_container {
-  display: flex;
-  justify-content: left;
-  gap: 20px;
-  height: auto;
-  width: auto;
-  margin-top: 20px;
-  margin-left: 30px;
-  margin-right: 20px;
+    display: flex;
+    justify-content: left;
+    gap: 20px;
+    height: auto;
+    width: auto;
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 20px;
 }
+
 .free_course_container .course-card {
-  background: #fff;
-  z-index: 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: 300px;
-  height: auto;
-  text-align: center;
-  overflow: hidden;
+    background: #fff;
+    z-index: 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 300px;
+    height: auto;
+    text-align: center;
+    overflow: hidden;
 }
-.free_course_container .course-card:hover{
-  transform: scale(1.05);
-  box-shadow: 0 6px 10px rgba(0,0,0,0.1);
 
+.free_course_container .course-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
 }
+
 .free_course_container .course-card img {
-  width: 100%;
-  height: 180px;
+    width: 100%;
+    height: 180px;
 }
-.course-content {
-  padding: 15px;
-  cursor: pointer;
-}
-.course-title {
-  font-size: 18px;
-  font-weight: bold;
-}
-.course-price {
-  color: red;
-  font-size: 16px;
-}
-/*Hiển thị footer===============================================================================================================================*/
-.footer_wrapper {
-  background: #16181b;
-  color: white;
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  gap: 180px;
-  flex-wrap: wrap;
-}
-.footer-column {
-  max-width: 250px;
-}
-.footer-column h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-.footer-column p, .footer-column a {
-  font-size: 14px;
-  color: #bbb;
-  text-decoration: none;
-  display: block;
-  margin-bottom: 5px;
-}
-.footer-column a:hover {
-  color: white;
-}
-.footer-social {
-  display: flex;
-  position: relative;
-  left:20%;
-  gap: 15px;
-  margin-top: 20px;
-  
-  
-}
-.footer-social img {
-  width: 24px;
-  height: 24px;
-  border-radius: 3px;
-  overflow: hidden;
 
+/* Common course card styles */
+.course-content {
+    padding: 15px;
+    cursor: pointer;
 }
+
+.course-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.course-price {
+    color: red;
+    font-size: 16px;
+}
+
+.course-price:hover {
+    text-decoration: underline;
+}
+
+.course_description {
+    font-size: 14px;
+    color: #666;
+    margin: 10px 0;
+    line-height: 1.4;
+}
+
+/* ==================== FOOTER ==================== */
+.footer_wrapper {
+    background: #16181b;
+    color: white;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 180px;
+    flex-wrap: wrap;
+}
+
+.footer-column {
+    max-width: 250px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-column p, .footer-column a {
+    font-size: 14px;
+    color: #bbb;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.footer-column a:hover {
+    color: white;
+}
+
+.footer-social {
+    display: flex;
+    position: relative;
+    left: 20%;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.footer-social img {
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
 .footer-bottom {
-  text-align: center;
-  padding: 10px;
-  background: #16181b;
-  color: #bbb;
+    text-align: center;
+    padding: 10px;
+    background: #16181b;
+    color: #bbb;
 }
