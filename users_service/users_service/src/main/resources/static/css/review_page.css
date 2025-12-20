@@ -27,8 +27,18 @@
     color: white;
     text-transform: uppercase;
     cursor: pointer;
+    margin: 5px;
+    text-decoration: none;
 }
 
+.Web_subTitle_forum{
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
+    text-decoration: none;
+}
 /* Ô tìm kiếm */
 .serch_box {
     display: flex;
@@ -38,16 +48,16 @@
     margin-left: 40px;
     margin-right: 10px;
 }
-
+.forum_box {
+    background: #ffffff;
+    text-decoration: none;
+}
 .serch_box_icon {
     position: relative;
     margin-left: 0px;
     top: 17%;
 
 }
-
-
-
 
 ._input_15ttk_39 {
     width: 400px;

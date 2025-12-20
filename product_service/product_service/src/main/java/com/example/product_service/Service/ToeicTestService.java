@@ -26,6 +26,7 @@ public class ToeicTestService {
                 .stream()
                 .map(q -> new QuestionDTO(
                         q.getId(),
+                        q.getImageUrl(),
                         q.getContent(),
                         q.getOptionA(),
                         q.getOptionB(),

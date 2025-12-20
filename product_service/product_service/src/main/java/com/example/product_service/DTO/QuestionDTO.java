@@ -10,6 +10,7 @@ import lombok.*;
 @Setter
 public class QuestionDTO {
     private Long id;
+    private String imageUrl;
     private String content;
     private String optionA;
     private String optionB;

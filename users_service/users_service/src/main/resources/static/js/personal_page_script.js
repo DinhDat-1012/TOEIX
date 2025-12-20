@@ -192,11 +192,16 @@ document.addEventListener("click", function (event) {
 //heatmap=======================================
 function renderCalendar() {
     const studyData = {
-        "2025-03-01": 2, // Học vừa
-        "2025-03-08": 3, // Học cao
-        "2025-03-15": 1, // Học nhẹ
-        "2025-03-20": 4, // Học rất cao
-        "2025-03-25": 2  // Học vừa
+        "2025-01-01": 2, // Học vừa
+        "2025-12-08": 3, // Học cao
+        "2025-12-15": 1, // Học nhẹ
+        "2025-12-20": 4, // Học rất cao
+        "2025-12-25": 2,  // Học vừa
+        "2025-12-01": 2, // Học vừa
+        "2025-12-02": 3, // Học cao
+        "2025-12-18": 1, // Học nhẹ
+        "2025-12-19": 4, // Học rất cao
+        "2025-12-17": 2
     };
 
     const calendar = document.getElementById("calendar");
@@ -227,3 +232,169 @@ function renderCalendar() {
     }
 }
 document.addEventListener("DOMContentLoaded", renderCalendar);
+
+const quotes = [
+    {
+        text: "Cuộc sống không phải là chờ cơn bão đi qua, mà là học cách nhảy múa dưới cơn mưa và bước tiếp dù hoàn cảnh có khắc nghiệt đến đâu.",
+        author: "Vivian Greene"
+    },
+    {
+        text: "Thành công thường đến với những người quá bận rộn để tìm kiếm nó, vì họ tập trung vào việc làm đúng mỗi ngày.",
+        author: "Henry David Thoreau"
+    },
+    {
+        text: "Đừng so sánh chương một của cuộc đời mình với chương hai mươi của người khác, vì mỗi hành trình đều có nhịp độ riêng.",
+        author: "Unknown"
+    },
+    {
+        text: "Không quan trọng bạn đi chậm đến mức nào, miễn là bạn không dừng lại và bỏ cuộc giữa chừng.",
+        author: "Khổng Tử"
+    },
+    {
+        text: "Những gì bạn làm hôm nay có thể cải thiện tất cả những ngày mai, vì vậy hãy hành động với mục tiêu rõ ràng.",
+        author: "Ralph Marston"
+    },
+    {
+        text: "Sự khác biệt giữa người thành công và người thất bại không nằm ở sức mạnh hay trí thông minh, mà nằm ở sự kiên trì.",
+        author: "Napoleon Hill"
+    },
+    {
+        text: "Nếu bạn không sẵn sàng mạo hiểm những điều bình thường, bạn sẽ phải chấp nhận một cuộc sống tầm thường.",
+        author: "Jim Rohn"
+    },
+    {
+        text: "Cuộc đời không yêu cầu bạn phải hoàn hảo, nhưng nó đòi hỏi bạn phải chân thành và nỗ lực hết mình.",
+        author: "Unknown"
+    },
+    {
+        text: "Thất bại chỉ đơn giản là cơ hội để bắt đầu lại, lần này thông minh hơn và mạnh mẽ hơn trước.",
+        author: "Henry Ford"
+    },
+    {
+        text: "Bạn không thể thay đổi hướng gió, nhưng bạn có thể điều chỉnh cánh buồm để đến được nơi mình muốn.",
+        author: "Aristotle"
+    },
+    {
+        text: "Những giới hạn duy nhất tồn tại trong cuộc sống là những giới hạn do chính bạn đặt ra trong suy nghĩ của mình.",
+        author: "Tony Robbins"
+    },
+    {
+        text: "Mỗi ngày bạn không bỏ cuộc là một ngày bạn tiến gần hơn đến phiên bản tốt hơn của chính mình.",
+        author: "Unknown"
+    },
+    {
+        text: "Đừng để nỗi sợ thất bại ngăn cản bạn thử, vì hối tiếc còn nặng nề hơn rất nhiều.",
+        author: "Unknown"
+    },
+    {
+        text: "Sự kỷ luật là cầu nối giữa mục tiêu bạn đặt ra và thành quả bạn đạt được trong tương lai.",
+        author: "Jim Rohn"
+    },
+    {
+        text: "Cuộc sống sẽ thử thách bạn, nhưng chính cách bạn phản ứng mới quyết định bạn sẽ trở thành ai.",
+        author: "Viktor Frankl"
+    },
+    {
+        text: "Không ai có thể quay lại để bắt đầu lại từ đầu, nhưng ai cũng có thể bắt đầu ngay bây giờ để tạo ra một kết thúc khác.",
+        author: "Carl Bard"
+    },
+    {
+        text: "Thành công không phải là việc bạn leo cao đến đâu, mà là bạn đã vượt qua bao nhiêu lần muốn bỏ cuộc.",
+        author: "Booker T. Washington"
+    },
+    {
+        text: "Những người đi xa nhất không phải là người thông minh nhất, mà là người không dừng lại khi mọi thứ trở nên khó khăn.",
+        author: "Unknown"
+    },
+    {
+        text: "Hãy làm việc trong im lặng, để thành công của bạn tự lên tiếng thay cho tất cả.",
+        author: "Frank Ocean"
+    },
+    {
+        text: "Cuộc sống trở nên ý nghĩa hơn khi bạn theo đuổi điều đúng đắn, chứ không chỉ là điều dễ dàng.",
+        author: "Martin Luther King Jr."
+    }
+];
+
+function displayDailyQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    document.querySelector('.quote-content').innerText = `"${quotes[randomIndex].text}"`;
+    document.querySelector('.quote-author').innerText = `— ${quotes[randomIndex].author}`;
+}
+
+window.onload = displayDailyQuote;
+
+// Nơi thực hiện xử lý khóa học người dùng trong tab persional
+
+async function loadCourseManager() {
+    const token = localStorage.getItem("authToken");
+    const username = localStorage.getItem("userName");
+    const managerContainer = document.getElementById("courseManagerList");
+
+    if (!token || !username) {
+        managerContainer.innerHTML = "<p>Vui lòng đăng nhập để xem khóa học.</p>";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:8080/users/api/v1/my-course", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token,
+                "username": username
+            },
+            body: JSON.stringify({}) // Body trống theo thiết kế API của bạn
+        });
+
+        if (!response.ok) throw new Error("Không thể tải danh sách khóa học");
+
+        const courses = await response.json();
+
+        if (courses.length === 0) {
+            managerContainer.innerHTML = "<p>Bạn chưa đăng ký khóa học nào.</p>";
+            return;
+        }
+
+        managerContainer.innerHTML = ""; // Xóa dòng chữ đang tải
+
+        courses.forEach(course => {
+            const courseItem = document.createElement("div");
+            courseItem.className = "course-item";
+
+            // Giả sử DTO trả về: course_names, courseCode, purchaseDate
+            courseItem.innerHTML = `
+                <div class="course-info">
+                    <h4><span class="course-code-tag">${course.courseCode}</span> ${course.course_names}</h4>
+                    <p><i class="far fa-calendar-alt"></i> Ngày đăng ký: ${new Date(course.purchaseDate).toLocaleDateString('vi-VN')}</p>
+                </div>
+                <button class="delete-course-btn" onclick="deleteMyCourse('${course.courseCode}')">
+                    <i class="fas fa-trash-alt"></i> Xóa
+                </button>
+            `;
+            managerContainer.appendChild(courseItem);
+        });
+
+    } catch (error) {
+        console.error("Lỗi:", error);
+        managerContainer.innerHTML = "<p>Có lỗi xảy ra khi tải dữ liệu.</p>";
+    }
+}
+
+// Hàm xóa khóa học (Placeholder cho API sau này)
+async function deleteMyCourse(courseCode) {
+    if (confirm(`Bạn có chắc muốn xóa khóa học ${courseCode} khỏi danh sách?`)) {
+        console.log("Đang gọi API xóa cho mã:", courseCode);
+
+        // Ví dụ logic sau này:
+        // const res = await fetch(`.../api/v1/delete-course`, { method: 'DELETE', headers: ... })
+
+        alert("Tính năng xóa đang được cài đặt API. Mã khóa học: " + courseCode);
+
+        // Sau khi xóa thành công thì load lại danh sách
+        // loadCourseManager();
+    }
+}
+
+// Khởi chạy khi trang web tải xong
+document.addEventListener("DOMContentLoaded", loadCourseManager);

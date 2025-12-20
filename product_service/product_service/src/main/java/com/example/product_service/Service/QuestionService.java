@@ -42,6 +42,7 @@ public class QuestionService {
                 .map(q -> {
                     QuestionDTO dto = new QuestionDTO();
                     dto.setId(q.getId());
+                    dto.setImageUrl(q.getImageUrl());
                     dto.setContent(q.getContent());
                     dto.setOptionA(q.getOptionA());
                     dto.setOptionB(q.getOptionB());

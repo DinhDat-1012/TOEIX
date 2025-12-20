@@ -304,7 +304,7 @@
             <hr>
             <ul>
                 <a href="/personal" style="text-decoration: none"><li>📌 Trang cá nhân</li></a>
-                <a href="/review" style="text-decoration: none"><li>📝 Ôn tập từ mới</li></a>
+                <!--<a href="/review" style="text-decoration: none"><li>📝 Ôn tập từ mới</li></a>-->
                 <a href="/vocabulary" style="text-decoration: none"><li>📝 Từ mới mỗi ngày</li></a>
                 <a href="/toeic-test" style="text-decoration: none"><li>📝 Thi Thử Toeic</li></a>
                 <li>⭐ Bài học đã lưu</li>
@@ -372,62 +372,124 @@
 <!-- Khóa học mới -->
 <section class="_new_course_container" >
     <div class="course_header">
-        <h3>Khóa học mới dành cho bạn.</h3>
+        <h3>Khóa học tiếng anh mới dành cho bạn.</h3>
         <span class="new_course_view_all">Xem tất cả.</span>
     </div>
 </section>
 
 <section class="new_course_container">
 </section>
+<!-- Modal Chi tiết khóa học -->
+<section class="course_detail_shown" id="courseModal">
+    <!-- Lớp phủ làm mờ nền -->
+    <div class="modal-overlay"></div>
 
+    <div class="modal-container">
+        <!-- Nút đóng -->
+        <button class="close-btn">&times;</button>
+
+        <!-- Trạng thái chờ -->
+        <div id="modal-content-loading" style="display: none; padding: 20px;">
+            Đang tải dữ liệu...
+        </div>
+
+        <!-- Nội dung chi tiết khóa học -->
+        <div id="modal-body">
+            <div class="modal-header">
+                <img id="modal-img" src="" alt="Course Image">
+                <div class="header-text">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-price" class="price-tag"></p>
+                </div>
+            </div>
+
+            <div class="modal-info">
+                <h3>Chi tiết khóa học</h3>
+                <p id="modal-desc-full"></p>
+            </div>
+
+            <div class="modal-actions">
+                <button id="add-to-my-list-btn" class="add-btn">
+                    Thêm vào khóa học của tôi
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("courseModal");
+        const closeBtn = document.querySelector(".close-btn");
+        const overlay = document.querySelector(".modal-overlay");
+
+        // --- 1. Hàm đóng Modal ---
+        const closeModal = () => {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Cho phép cuộn trang lại
+        };
+
+        closeBtn.onclick = closeModal;
+        overlay.onclick = closeModal;
+
+        // --- 2. Hàm hiển thị chi tiết (Kích hoạt khi nhấn vào Course Card) ---
+        function showCourseDetail(course) {
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Không cho cuộn trang nền
+
+            // Đổ dữ liệu vào Modal
+            document.getElementById("modal-img").src = course.imageUrl || "/Course_img/toeic_course.png";
+            document.getElementById("modal-title").innerText = course.courseName || "Tên khóa học";
+            document.getElementById("modal-price").innerText = course.price ? `Giá: ${course.price}$` : "Miễn phí";
+            document.getElementById("modal-desc-full").innerText = course.description || "Khóa học này chưa có mô tả chi tiết.";
+
+            // Xử lý nút "Thêm vào danh sách"
+            const addBtn = document.getElementById("add-to-my-list-btn");
+            addBtn.onclick = function() {
+                alert("Đã thêm khóa học: " + course.courseName + " vào danh sách của bạn!");
+                // Sau này bạn gọi API POST tại đây
+            };
+        }
+
+        // --- 3. Lấy dữ liệu từ API và hiển thị ---
         fetch("http://localhost:8090/product/api/v1/all-course")
             .then(response => response.json())
             .then(data => {
                 const nc_container = document.querySelector(".new_course_container");
                 nc_container.innerHTML = "";
 
-                if (!Array.isArray(data)) {
-                    console.error("Dữ liệu không hợp lệ:", data);
-                    return;
-                }
+                if (!Array.isArray(data)) return;
 
-                data.slice(0, 4).forEach(course => {
+                let english_course_data = [];
+
+                // Lọc các course có "E-1" trong tên
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].courseCode && data[i].courseCode.includes("E-1")) {
+                        english_course_data.push(data[i]);
+                    }
+                }
+                english_course_data.forEach(course => {
                     const courseCard = document.createElement("div");
                     courseCard.className = "course-card new_course";
+                    courseCard.style.cursor = "pointer"; // Hiệu ứng bàn tay khi di chuột
 
-                    const img = document.createElement("img");
-                    img.src = course.imageUrl || "/Course_img/toeic_course.png";
-                    img.alt = course.courseName || "Khóa học";
+                    // QUAN TRỌNG: Gán sự kiện click để mở modal
+                    courseCard.addEventListener("click", () => {
+                        showCourseDetail(course);
+                    });
 
-                    const contentDiv = document.createElement("div");
-                    contentDiv.className = "course-content";
-
-                    const titleDiv = document.createElement("div");
-                    titleDiv.className = "course-title";
-                    titleDiv.textContent = course.courseName || "Tên khóa học";
-
-                    const descriptionDiv = document.createElement("div");
-                    descriptionDiv.className = "course_description";
-                    descriptionDiv.textContent = course.description || "";
-
-                    const priceDiv = document.createElement("div");
-                    priceDiv.className = "course-price";
-                    priceDiv.textContent = course.price ? course.price + "$" : "Miễn phí";
-                    priceDiv.style.padding = "10px";
-
-                    contentDiv.appendChild(titleDiv);
-                    contentDiv.appendChild(descriptionDiv);
-                    contentDiv.appendChild(priceDiv);
-
-                    courseCard.appendChild(img);
-                    courseCard.appendChild(contentDiv);
+                    courseCard.innerHTML = `
+                    <img src="${course.imageUrl || '/Course_img/toeic_course.png'}" alt="Course">
+                    <div class="course-content">
+                        <div class="course-title">${course.courseName || 'Tên khóa học'}</div>
+                        <div class="course_description">${course.description || ''}</div>
+                        <div class="course-price" style="padding: 10px;">${course.price ? course.price + "$" : "Miễn phí"}</div>
+                    </div>
+                `;
 
                     nc_container.appendChild(courseCard);
                 });
             })
-            .catch(error => console.error("Lỗi khi tải khóa học mới:", error));
+            .catch(error => console.error("Lỗi khi tải khóa học:", error));
     });
 </script>
 
@@ -486,7 +548,7 @@
 
     // Hàm chuyển hướng đến chi tiết bài viết
     function goToForumPost(postId) {
-        window.location.href = `/forum/post/${postId}`;
+        window.location.href = `/forum`;
     }
 
     // Hàm format thời gian

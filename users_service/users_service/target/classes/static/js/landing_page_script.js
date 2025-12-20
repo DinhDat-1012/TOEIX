@@ -93,30 +93,25 @@ const AuthService = {
 
 // Storage Manager (sử dụng state thay vì localStorage)
 const StorageManager = {
-    state: {
-        authToken: null,
-        userName: null
-    },
-
     setToken(token) {
-        this.state.authToken = token;
+        localStorage.setItem("authToken", token);
     },
 
     setUserName(userName) {
-        this.state.userName = userName;
+        localStorage.setItem("userName", userName);
     },
 
     getToken() {
-        return this.state.authToken;
+        return localStorage.getItem("authToken");
     },
 
     getUserName() {
-        return this.state.userName;
+        return localStorage.getItem("userName");
     },
 
     clear() {
-        this.state.authToken = null;
-        this.state.userName = null;
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("userName");
     }
 };
 
@@ -210,6 +205,9 @@ async function handleLogin(event) {
         const result = await AuthService.login(requestData);
 
         // Lưu token và username
+        alert(result.token);
+        alert(username)
+
         StorageManager.setToken(result.token);
         StorageManager.setUserName(username);
 
@@ -339,3 +337,4 @@ async function get_OTP() {
         alert("Không thể gửi OTP. Vui lòng thử lại.");
     }
 }
+

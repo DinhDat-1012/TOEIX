@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài thi Đọc - TOEIC Reading</title>
+    <!-- CSS Chung -->
+    <link rel="stylesheet" th:href="@{/css/home_page.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/png" th:href="@{/Course_img/logo_1.png}">
+
+    <style>
+        /* --- COPY CSS CỦA HOMEPAGE (NAVBAR/FOOTER) --- */
+        body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; padding: 0; background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .head_bar { margin-bottom: 10px; } /* Ví dụ màu nền header */
+        .footer_wrapper { margin-top: auto; }
+
+        /* CSS cho Navbar (Giữ nguyên từ code bạn cung cấp) */
+        .forum-menu { display: flex; align-items: center; gap: 8px; padding: 10px 20px; cursor: pointer; color: rgb(250, 250, 254); text-decoration: none; transition: all 0.3s ease; border-radius: 5px; }
+        .forum-menu:hover { background-color: rgba(255, 255, 255, 0.1); transform: translateY(-2px); }
+        .forum-menu i { font-size: 20px; }
+        .forum-menu span { font-size: 15px; font-weight: 500; }
+
+        /* --- CSS CHO PHẦN THI (FORM EXAM) --- */
+        .word_review_wrapper {
+            max-width: 1200px;
+            width: 95%;
+            margin: 100px auto 40px auto; /* Margin top để tránh đè header */
+            padding: 0;
+            flex: 1;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #20bf6b 0%, #0fb9b1 100%); /* Màu xanh cho Reading khác với Listening */
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .test-header h1 { margin: 0 0 10px 0; font-size: 2.2em; }
+        .test-header p { margin: 0; font-size: 1.1em; opacity: 0.9; }
+
+        .timer-section {
+            display: flex; justify-content: space-around; padding: 20px;
+            background: white; border-radius: 12px; margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: sticky; top: 80px; z-index: 100; /* Sticky timer */
+        }
+
+        .timer-box { text-align: center; }
+        .timer-box label { display: block; font-size: 0.85em; color: #666; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; }
+        .timer-box .time { font-size: 1.8em; font-weight: 800; color: #20bf6b; }
+
+        /* Container cho câu hỏi */
+        .question-group-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Phần đoạn văn (Passage) - Đặc thù của Reading */
+        .reading-passage {
+            background-color: #f8f9fa;
+            border-left: 5px solid #20bf6b;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #2d3436;
+            max-height: 400px; /* Giới hạn chiều cao */
+            overflow-y: auto;  /* Cho phép cuộn nếu bài đọc dài */
+            white-space: pre-line; /* Giữ định dạng xuống dòng */
+        }
+
+        .question-item {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        .question-item:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+
+        .question-header { display: flex; gap: 15px; margin-bottom: 15px; }
+        .question-number {
+            background: #20bf6b; color: white;
+            width: 35px; height: 35px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; flex-shrink: 0;
+        }
+        .question-text { font-weight: 600; font-size: 1.1em; margin-top: 5px; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option {
+            display: flex; align-items: center; padding: 12px 15px;
+            border: 2px solid #e9ecef; border-radius: 8px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .option:hover { background-color: #e6fffa; border-color: #20bf6b; }
+        .option input { margin-right: 10px; accent-color: #20bf6b; width: 18px; height: 18px; }
+        .option.selected { border-color: #20bf6b; background-color: #e6fffa; font-weight: 600; }
+
+        /* Submit Button */
+        .submit-section { text-align: center; margin-top: 40px; }
+        .submit-btn {
+            background: linear-gradient(135deg, #20bf6b 0%, #0fb9b1 100%);
+            color: white; border: none; padding: 15px 50px;
+            border-radius: 50px; font-size: 1.2em; font-weight: bold;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(32, 191, 107, 0.3); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .options-grid { grid-template-columns: 1fr; }
+            .timer-section { top: 60px; }
+        }
+
+        /* Modal Kết quả (Giữ nguyên style cũ) */
+        .result-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .result-content { background: white; padding: 40px; border-radius: 15px; text-align: center; max-width: 500px; width: 90%; animation: slideIn 0.3s; }
+        @keyframes slideIn { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+        .score-big { font-size: 4em; font-weight: bold; color: #20bf6b; margin: 10px 0; }
+        .btn-close { background: #555; color: white; padding: 10px 30px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+
+        /* Loading */
+        .loading { text-align: center; padding: 50px; font-size: 1.2em; color: #666; }
+    </style>
+</head>
+<body>
+
+<!-- NAV BAR (GIỮ NGUYÊN NHƯ YÊU CẦU) -->
+<nav class="head_bar" id="head_bar">
+    <a href="/home">
+        <i class="fa fa-home" aria-hidden="true" style="font-size: 25px; margin-right: 10px; color: rgb(250, 250, 254); position: relative;margin-bottom: 20%;"></i>
+    </a>
+    <a class="Web_subTitle" >ToeiX - Học tiếng Anh ngay! </a>
+
+    <!-- Thêm mục Diễn đàn vào navigation -->
+    <a href="/forum" class="forum-menu">
+        <i class="fa-solid fa-comments"></i>
+        <span>Diễn đàn</span>
+    </a>
+
+    <div class="serch_box">
+        <div class="serch_box_icon">
+            <input class="_input_15ttk_39" id="__serch_box" spellcheck="false" placeholder="Tìm kiếm khóa học, bài viết, video, ..." value="">
+            <div id="search_results"> </div>
+        </div>
+        <script>
+            const searchBox = document.getElementById('__serch_box');
+            const searchResults = document.getElementById('search_results');
+
+            document.addEventListener('click', (event) => {
+                const isClickInsideInput = searchBox.contains(event.target);
+                const isClickInsideResults = searchResults.contains(event.target);
+
+                if (!isClickInsideInput && !isClickInsideResults) {
+                    searchBox.value = '';
+                    searchResults.innerHTML = '';
+                }
+            });
+
+            searchBox.addEventListener('input', ()=> {
+                const keyword = searchBox.value.trim();
+                if (keyword.length < 1) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
+                fetch(`http://localhost:8090/product/api/v1/courses/search?keyword=${encodeURIComponent(keyword)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResults.innerHTML = '';
+                        searchResults.style.borderRadius= "5px";
+                        searchResults.style.overflow= "hidden";
+                        searchResults.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                        searchResults.style.backgroundColor = "#fff";
+                        searchResults.style.marginTop = "5px";
+                        searchResults.style.position = "absolute";
+
+                        if (data.length === 0) {
+                            const notFound = document.createElement('div');
+                            notFound.textContent = 'Không tìm thấy kết quả cho:' + searchBox.value;
+                            notFound.style.padding = "10px";
+                            notFound.style.color = "red";
+                            notFound.style.textAlign = "center";
+                            notFound.style.cursor = "pointer";
+                            searchResults.appendChild(notFound);
+                            return;}
+
+                        data.slice(0,5).forEach(course => {
+                            const div = document.createElement('div');
+                            div.className = 'result-item';
+                            div.style.color = "black";
+                            div.style.backgroundColor = "#e5e7e9";
+                            div.style.padding = "10px";
+                            div.style.cursor = "pointer";
+                            div.textContent = `${course.courseName} - ${course.courseCode}`;
+                            div.addEventListener("mouseover", () => {
+                                div.style.backgroundColor = "#d5dbdb"; });
+                            div.addEventListener("mouseout", () => {
+                                div.style.backgroundColor = "#e5e7e9"; });
+                            div.addEventListener('click', () => {
+                                alert(`Bạn đã chọn: ${course.courseName}`);
+                                searchBox.value = course.courseName;
+                                searchResults.innerHTML = '';
+                            });
+                            searchResults.appendChild(div);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+    </div>
+
+    <div class="user_courses" >
+        <div class="user_courses_title"  id="user_courses_title">
+            <p>Khóa khọc của tôi</p>
+            <div id="user-course-container" style="position: absolute; display: none; background-color: #f0f0f0;z-index: 8;overflow: hidden;border-radius: 10px;top: 60px"></div>
+        </div>
+        <i class="fa fa-caret-down" aria-hidden="true"></i>
+    </div>
+
+    <div class="noti_box" onclick="toggleNotifications()">
+        <i class="fa-solid fa-bell"></i>
+    </div>
+
+    <div id="notification-list" class="notification-list">
+        <p class="title">Thông báo</p>
+        <div id="notification-container"></div>
+    </div>
+
+    <div class="navBar_">
+        <nav class="user_i4_box">
+            <div class="user_ico" onclick="toggleMenu()">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="user_avatar" >
+            </div>
+            <div class="user_status"></div>
+        </nav>
+
+        <div class="profile-menu" id="profileMenu">
+            <div class="profile-header">
+                <img th:src="@{/avatar/user_avatar.jpg}" alt="Avatar" class="profile-pic">
+                <div class="profile-info">
+                    <p class="name" id="fullName">Anonymous</p>
+                    <p class="username" id="username">Anonymous</p>
+                </div>
+            </div>
+            <hr>
+            <ul>
+                <a href="/personal" style="text-decoration: none"><li>📌 Trang cá nhân</li></a>
+                <!--<a href="/review" style="text-decoration: none"><li>📝 Ôn tập từ mới</li></a>-->
+                <a href="/vocabulary" style="text-decoration: none"><li>📝 Từ mới mỗi ngày</li></a>
+                <a href="/toeic-test" style="text-decoration: none"><li>📝 Thi Thử Toeic</li></a>
+                <li>⭐ Bài học đã lưu</li>
+                <hr>
+                <li>⚙️ Cài đặt</li>
+                <li class="logout" onclick="logOut()">🔓 Đăng xuất</li>
+            </ul>
+        </div>
+        <script th:src="@{/js/home_page_script.js}"></script>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="word_review_wrapper">
+    <div class="test-header">
+        <h1 id="test-title">TOEIC Reading Test</h1>
+        <p id="test-description">Part 7 - Reading Comprehension</p>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer-section">
+        <div class="timer-box">
+            <label><i class="fas fa-clock"></i> Còn lại</label>
+            <div class="time" id="timer">45:00</div>
+        </div>
+        <div class="timer-box">
+            <label><i class="fas fa-check-circle"></i> Đã làm</label>
+            <div class="time" id="answered-count">0/0</div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Đang tải bài đọc...
+    </div>
+
+    <!-- Container chứa câu hỏi -->
+    <div id="reading-content-area"></div>
+
+    <div class="submit-section" id="submit-section" style="display: none;">
+        <button class="submit-btn" onclick="submitTest()">
+            <i class="fas fa-paper-plane"></i> Nộp bài
+        </button>
+    </div>
+</div>
+
+<!-- Modal Kết quả -->
+<div class="result-modal" id="result-modal">
+    <div class="result-content">
+        <h2>Kết Quả Bài Làm</h2>
+        <div class="score-big" id="result-score">0/0</div>
+        <p>Thời gian làm bài: <span id="result-time">00:00</span></p>
+        <p>Số câu đúng: <strong id="result-correct">0</strong></p>
+        <button class="btn-close" onclick="closeModal()">Đóng & Xem đáp án</button>
+    </div>
+</div>
+
+<!-- FOOTER (GIỮ NGUYÊN) -->
+<footer class="footer_wrapper">
+    <div class="footer-column">
+        <h3>Học Tiếng Anh Để Đi Làm</h3>
+        <p>Điện thoại: 0398756015</p>
+        <p>Email: Dinhdat1012vn@gmail.com</p>
+    </div>
+    <div class="footer-bottom">©2025 ToeiX. Nền tảng học tập tiếng Anh trực tuyến</div>
+</footer>
+
+<!-- SCRIPT LOGIC -->
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const testId = urlParams.get('testId') || 1;
+    const partId = urlParams.get('partId') || 7; // Mặc định Part 7 (Reading)
+
+    let questionsData = [];
+    let userAnswers = {};
+    let startTime = Date.now();
+    let timerInterval;
+    let isSubmitted = false;
+
+    // --- Giả lập Load dữ liệu Reading ---
+    // (Trong thực tế bạn sẽ gọi fetch API như các bài trước)
+    async function loadReadingTest() {
+        // Giả lập delay mạng
+        setTimeout(() => {
+            // DATA MẪU: Cấu trúc cho Reading thường có đoạn văn (passage) và danh sách câu hỏi đi kèm
+            const mockData = [
+                {
+                    id: "group1",
+                    passage: "To: All Staff\nFrom: Management\nDate: March 15\nSubject: Office Renovations\n\nPlease be advised that the office renovations will begin next Monday, March 20. The construction crew will start on the 3rd floor and work their way down. \n\nEmployees on the 3rd floor should move their essential items to the temporary workspace in Conference Room B by Friday afternoon. We expect the work to take approximately two weeks per floor.\n\nThank you for your cooperation.",
+                    questions: [
+                        {
+                            id: 101,
+                            content: "What is the memo mainly about?",
+                            optionA: "A holiday party",
+                            optionB: "Office renovations",
+                            optionC: "New hiring policies",
+                            optionD: "Computer updates",
+                            correctAnswer: "B"
+                        },
+                        {
+                            id: 102,
+                            content: "When will the work begin?",
+                            optionA: "March 15",
+                            optionB: "March 20",
+                            optionC: "Friday afternoon",
+                            optionD: "Next month",
+                            correctAnswer: "B"
+                        },
+                        {
+                            id: 103,
+                            content: "Where should 3rd-floor employees move their items?",
+                            optionA: "To the lobby",
+                            optionB: "To their cars",
+                            optionC: "To Conference Room B",
+                            optionD: "To the 4th floor",
+                            correctAnswer: "C"
+                        }
+                    ]
+                },
+                {
+                    id: "group2",
+                    passage: "WANTED: GRAPHIC DESIGNER\n\nABC Marketing is looking for a creative and experienced Graphic Designer to join our team. \n\nResponsibilities:\n- Create visual concepts for advertising campaigns.\n- Collaborate with the marketing team.\n\nRequirements:\n- Bachelor's degree in Graphic Design.\n- 3+ years of experience.\n- Proficiency in Adobe Creative Suite.\n\nSend your resume and portfolio to hr@abcmarketing.com.",
+                    questions: [
+                        {
+                            id: 104,
+                            content: "What position is being advertised?",
+                            optionA: "Marketing Manager",
+                            optionB: "Web Developer",
+                            optionC: "Graphic Designer",
+                            optionD: "HR Assistant",
+                            correctAnswer: "C"
+                        },
+                        {
+                            id: 105,
+                            content: "How many years of experience are required?",
+                            optionA: "1 year",
+                            optionB: "2 years",
+                            optionC: "3+ years",
+                            optionD: "5 years",
+                            correctAnswer: "C"
+                        }
+                    ]
+                }
+            ];
+
+            questionsData = mockData;
+            renderReadingTest();
+            startTimer(45); // 45 phút cho bài Reading
+        }, 1000);
+    }
+
+    function renderReadingTest() {
+        document.getElementById('loading').style.display = 'none';
+        const container = document.getElementById('reading-content-area');
+
+        let totalQuestions = 0;
+
+        questionsData.forEach((group, gIndex) => {
+            const groupCard = document.createElement('div');
+            groupCard.className = 'question-group-card';
+
+            // 1. Hiển thị bài đọc (Passage)
+            if (group.passage) {
+                const passageDiv = document.createElement('div');
+                passageDiv.className = 'reading-passage';
+                passageDiv.textContent = group.passage;
+                groupCard.appendChild(passageDiv);
+            }
+
+            // 2. Hiển thị danh sách câu hỏi của bài đọc đó
+            group.questions.forEach((q) => {
+                totalQuestions++;
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question-item';
+                qDiv.id = `q-${q.id}`;
+                qDiv.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${q.id}</div>
+                        <div class="question-text">${q.content}</div>
+                    </div>
+                    <div class="options-grid">
+                        <label class="option" onclick="selectOption(${q.id}, 'A', this)">
+                            <input type="radio" name="q_${q.id}" value="A"> A. ${q.optionA}
+                        </label>
+                        <label class="option" onclick="selectOption(${q.id}, 'B', this)">
+                            <input type="radio" name="q_${q.id}" value="B"> B. ${q.optionB}
+                        </label>
+                        <label class="option" onclick="selectOption(${q.id}, 'C', this)">
+                            <input type="radio" name="q_${q.id}" value="C"> C. ${q.optionC}
+                        </label>
+                        <label class="option" onclick="selectOption(${q.id}, 'D', this)">
+                            <input type="radio" name="q_${q.id}" value="D"> D. ${q.optionD}
+                        </label>
+                    </div>
+                `;
+                groupCard.appendChild(qDiv);
+            });
+
+            container.appendChild(groupCard);
+        });
+
+        document.getElementById('submit-section').style.display = 'block';
+        updateCount(0, totalQuestions);
+
+        // Lưu tổng số câu hỏi để dùng khi tính điểm
+        window.totalQ = totalQuestions;
+    }
+
+    function selectOption(qId, val, labelElem) {
+        if(isSubmitted) return;
+        userAnswers[qId] = val;
+
+        // UI Handling
+        const name = `q_${qId}`;
+        const inputs = document.getElementsByName(name);
+        inputs.forEach(input => {
+            input.parentElement.classList.remove('selected');
+            if(input.value === val) {
+                input.checked = true;
+            }
+        });
+        labelElem.classList.add('selected');
+
+        // Update counter
+        updateCount(Object.keys(userAnswers).length, window.totalQ);
+    }
+
+    function updateCount(answered, total) {
+        document.getElementById('answered-count').textContent = `${answered}/${total}`;
+    }
+
+    function startTimer(minutes) {
+        let time = minutes * 60;
+        const display = document.getElementById('timer');
+
+        timerInterval = setInterval(() => {
+            const m = Math.floor(time / 60);
+            const s = time % 60;
+            display.textContent = `${m}:${s < 10 ? '0'+s : s}`;
+
+            if (--time < 0) {
+                clearInterval(timerInterval);
+                alert("Hết giờ làm bài!");
+                submitTest();
+            }
+        }, 1000);
+    }
+
+    function submitTest() {
+        if(isSubmitted) return;
+        if(!confirm("Bạn có chắc chắn muốn nộp bài?")) return;
+
+        isSubmitted = true;
+        clearInterval(timerInterval);
+
+        let correct = 0;
+
+        // Tính điểm
+        questionsData.forEach(group => {
+            group.questions.forEach(q => {
+                const userAns = userAnswers[q.id];
+                const div = document.getElementById(`q-${q.id}`);
+                const options = div.querySelectorAll('.option');
+
+                // Highlight đáp án
+                options.forEach(opt => {
+                    const input = opt.querySelector('input');
+                    const val = input.value;
+
+                    // Reset style
+                    opt.classList.remove('selected');
+
+                    if (val === q.correctAnswer) {
+                        opt.style.backgroundColor = "#d4edda"; // Màu xanh cho đáp án đúng
+                        opt.style.borderColor = "#28a745";
+                    }
+
+                    if (val === userAns && val !== q.correctAnswer) {
+                        opt.style.backgroundColor = "#f8d7da"; // Màu đỏ cho đáp án sai của user
+                        opt.style.borderColor = "#dc3545";
+                    }
+                });
+
+                if (userAns === q.correctAnswer) correct++;
+            });
+        });
+
+        // Show Modal
+        document.getElementById('result-score').textContent = `${correct}/${window.totalQ}`;
+        document.getElementById('result-correct').textContent = correct;
+        document.getElementById('result-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('result-modal').style.display = 'none';
+        window.scrollTo(0,0);
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById('profileMenu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Init
+    loadReadingTest();
+</script>
+
+</body>
+</html>

@@ -304,7 +304,7 @@ hr {
     margin-top: 80px;
     margin-left: 20px;
     margin-right: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     height: 250px;
 }
 
@@ -549,4 +549,158 @@ h3 {
     padding: 10px;
     background: #16181b;
     color: #bbb;
+}
+/*Quote of the day*/
+.motivation_of_day {
+    background: linear-gradient(135deg, #6e8efb, #a777e3); /* Màu nền gradient hiện đại */
+    background-image: url("../avatar/quote_bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 20px;
+    text-align: center;
+    color: white;
+    border-radius: 15px;
+    margin: 20px 20px 20px 20px;
+    max-width: 1800px;
+    max-height: 400px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.motivation-title {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.quote-content {
+    font-size: 1.8rem;
+    font-style: italic;
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.quote-author {
+    font-size: 1.1rem;
+    display: block;
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+/* Hiệu ứng khi di chuột vào */
+.motivation_of_day:hover {
+    transform: translateY(-5px);
+    transition: 0.3s ease;
+}
+/*TAB QUẢN LÝ KHÓA HỌC CỦA NGƯỜI DÙNG*/
+/* Container bao bên ngoài để căn giữa và tạo khoảng cách */
+.course_manager_wrapper {
+    width: 95%;            /* Chiếm 95% chiều ngang màn hình */
+    max-width: 1400px;     /* Giới hạn độ rộng tối đa trên màn hình lớn */
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.manager-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Thẻ chứa danh sách khóa học (Nơi sẽ hiện scrollbar) */
+
+.course_manager {
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    background-color: #ffbe98;
+    width: 100%;           /* Trải dài hết chiều ngang container */
+    max-height: 500px;      /* Giới hạn chiều cao (Ví dụ: hiện được khoảng 5-6 khóa học) */
+    overflow-y: auto;      /* Tự động hiện thanh cuộn dọc nếu nội dung vượt quá max-height */
+    padding-right: 10px;   /* Khoảng trống để không bị đè lên thanh cuộn */
+}
+
+/* Tùy chỉnh thanh cuộn (Scrollbar) cho đẹp hơn */
+.course_manager::-webkit-scrollbar {
+    width: 8px;
+}
+
+.course_manager::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.course_manager::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.course_manager::-webkit-scrollbar-thumb:hover {
+    background: #667eea;
+}
+
+/* Style cho từng hàng khóa học */
+.course-item {
+    display: flex;
+    justify-content: space-between; /* Đẩy thông tin sang trái, nút xóa sang phải */
+    align-items: center;
+    padding: 15px 25px;
+    margin-bottom: 12px;
+    background: #fdfdfd;
+    border: 1px solid #edf2f7;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.course-item:hover {
+    background: #f7fafc;
+    border-color: #667eea;
+    transform: scale(1.005); /* Hiệu ứng nổi nhẹ khi di chuột */
+}
+
+.course-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.course-info h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.course-code-tag {
+    background: #ebf4ff;
+    color: #3182ce;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.delete-course-btn {
+    background-color: #fff5f5;
+    color: #e33b3b;
+    border: 1px solid #feb2b2;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.delete-course-btn:hover {
+    background-color: #e53e3e;
+    color: white;
 }

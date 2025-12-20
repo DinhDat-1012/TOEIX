@@ -119,7 +119,7 @@ function displayUserCourse(course) {
             </div>
             <small style="color: black;padding-left: 15px">${new Date(course.purchaseDate).toLocaleString()}</small>
         `;
-        
+
         courseElement.addEventListener("click", () => {
             window.location.href = `http://localhost:8080/Course/${course.courseCode}`;
         });
@@ -183,5 +183,65 @@ document.addEventListener("click", function (event) {
 
     if (!notification.contains(event.target) && !list.contains(event.target)) {
         list.style.display = "none";
+    }
+});
+
+//=============================================script hiển thị chi tiết các khóa học>
+// Thay thế đoạn script hiển thị chi tiết của bạn bằng bản tối ưu này:
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("courseModal");
+    const closeBtn = document.querySelector(".close-btn");
+    const overlay = document.querySelector(".modal-overlay");
+
+    if (!modal || !closeBtn || !overlay) return; // Bảo vệ nếu HTML chưa có
+
+    const closeModal = () => {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+    };
+
+    closeBtn.onclick = closeModal;
+    overlay.onclick = closeModal;
+
+    // Fetch dữ liệu khóa học từ port 8090
+    fetch("http://localhost:8090/product/api/v1/all-course")
+        .then(response => response.json())
+        .then(data => {
+            const nc_container = document.querySelector(".new_course_container");
+            if (!nc_container) return;
+            nc_container.innerHTML = "";
+
+            data.forEach(course => {
+                const courseCard = document.createElement("div");
+                courseCard.className = "course-card new_course";
+                courseCard.innerHTML = `
+                    <img src="${course.imageUrl || '/Course_img/toeic_course.png'}" alt="">
+                    <div class="course-content">
+                        <div class="course-title">${course.courseName}</div>
+                    </div>
+                `;
+
+                // Sự kiện Click mở Modal
+                courseCard.onclick = () => showCourseDetail(course);
+                nc_container.appendChild(courseCard);
+            });
+        })
+        .catch(err => console.error("Lỗi tải khóa học:", err));
+
+    function showCourseDetail(course) {
+        modal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+
+        // Gán dữ liệu vào các ID trong HTML
+        document.getElementById("modal-img").src = course.imageUrl || "/Course_img/toeic_course.png";
+        document.getElementById("modal-title").innerText = course.courseName;
+        document.getElementById("modal-price").innerText = course.price ? `Giá: ${course.price}$` : "Miễn phí";
+        document.getElementById("modal-desc-full").innerText = course.description || "Không có mô tả cho khóa học này.";
+
+        const addBtn = document.getElementById("add-to-my-list-btn");
+        addBtn.onclick = () => {
+            // Gọi API lưu khóa học của bạn ở đây
+            alert("Đã thêm " + course.courseName + " vào danh sách!");
+        };
     }
 });

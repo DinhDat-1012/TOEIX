@@ -73,6 +73,11 @@ public class UserController {
         return "Toeic_exam";
     }
 
+    @GetMapping(path = "/toeic_reading")
+    public String toeic_exam_reading(Model model) {
+        return "Toeic_exam_reading";
+    }
+
     @GetMapping("/forum")
     public String showForumPage(Model model) {
         return "Forum"; // Trả về tên file Thymeleaf trong templates
